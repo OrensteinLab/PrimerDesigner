@@ -31,18 +31,19 @@ For the full sequence provided, a machine with 70 GB of RAM is sufficient.
 * Finally, ILP is executed using gurobi . 
 
 **Tracking_Timings_Creation.ipynb**
-
 <br>
-* This program has similar inital setup to Mutagenesis, but it also iterates through many different coding sequence sequence lengths & provides primer design outputs for each one.<br>
-* After it finishes iterating, it will save all of the relevant output data to a list and save it to a csv file. <br>
-* In addition, the program keeps track of time and memory usage for every part and records it for the user<br>
+* This program has similar inital setup to Mutagenesis, but it also iterates through many different coding sequence sequence lengths & provides primer design outputs for each one.
+* After it finishes iterating, it will save all of the relevant output data to a list and save it to a csv file.
+* In addition, the program keeps track of time and memory usage for every part and records it for the user
 
 ## Getting Started
 <br>
 1. **Clone the Repository:**
    ''''
+   
    git clone https://github.com/OrensteinLab/PrimerDesigner.git
    cd PrimerDesigner
+   
    ''''
  <br>
 
