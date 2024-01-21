@@ -51,7 +51,6 @@ For the full sequence provided, a machine with 70 GB of RAM is sufficient. <br>
 
 **Tracking_Timings_Creation.ipynb**
 <br>
-<br>
 * This program has similar inital setup to Mutagenesis, but it also iterates through many different coding sequence lengths & provides primer design outputs for each one.
 * After it finishes iterating, it will save all of the relevant output data to a list and save it to a csv file.
 * In addition, the program keeps track of time and memory usage for every part and records it for the user
