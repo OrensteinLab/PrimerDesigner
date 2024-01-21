@@ -3,12 +3,21 @@
 
 # Overview
  
-This repository contains the source code for the PrimerDesigner project. The main goal of this project is to create an algorithm for primer design for oligo synthesis using microarray probes for protein mutegnesis experiments. The algorithm aims to find the most efficient primer set with complete coverage and no cross hybridization risk.  The program uses a primer graph to represent all valid forward and reverse primer combinations. It also uses Integer Linear Programming (ILP) with specific  overlap and single path constraints to find the best pest path in the primer graph.
+This repository contains the source code for the PrimerDesigner project. 
+The main goal of this project is to create an algorithm for primer design for protein synthesis using microarray probes. 
+Protein synthesis using microarray probes is an efficient protein synthesis technique which enables high throughput protein mutagensis experiments.
+The algorithm aims to find the most efficient primer set with complete coverage and no cross hybridization risk.
+The program uses a primer graph to represent all valid forward and reverse primer combinations.
+It also uses Integer Linear Programming (ILP) with specific  overlap and single path constraints to find the best pest path in the primer graph.
 
 
 # Requirments
 
-PrimerDesinger requires Python 3.7 or higher. To run PrimerDesinger, you will need a local installation of Gurobi with an appropriate license (academic licenses are provided for free direct from Gurobi). You will also need to install gurobipy and make sure that you are able to import it from within your local environment. The installs are located at the top of the colab file. Note also that a large RAM may be required due to the space complexity of ILP solvers. For the full sequence provided, a machine with 70 GB of RAM is sufficient. 
+PrimerDesinger requires Python 3.7 or higher.
+To run PrimerDesinger, you will need a local installation of Gurobi with an appropriate license (academic licenses are provided for free direct from Gurobi).
+You will also need to install gurobipy and make sure that you are able to import it from within your local environment.
+The installs are located at the top of the colab file. Note also that a large RAM may be required due to the space complexity of ILP solvers. 
+For the full sequence provided, a machine with 70 GB of RAM is sufficient. 
 
 # Programs
 
