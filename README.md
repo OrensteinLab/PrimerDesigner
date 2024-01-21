@@ -28,7 +28,6 @@ It also uses Integer Linear Programming (ILP) with specific  overlap and single 
    cd PrimerDesigner
    ```
 <br>
-<br>
 2. Open the Tracking_Timings_Creation.ipynb notebook using Jupyter or any compatible environment.
 <br>
 <br>
@@ -39,17 +38,19 @@ It also uses Integer Linear Programming (ILP) with specific  overlap and single 
 ## Mutagensis.ipynb
 
 - The import section installs and imports the necessary libraries. <br> 
-- The setup subsection establishes the data structures required to carry out primer design (data_frame for primer costs, the actual DNA sequence).  <br> 
-- Under Algorithm: first a primer graph is created, then the user must input their gurobi ID and key in the "Creating Gurobipy Solver" section. <br> 
-- Next, the model hyperparameters( including primer length, maximum overlap and oligonucleotide length) are initalized.  <br> 
+- The setup subsection establishes the data structures required to carry out primer design (i.e data_frame for primer sequences information).  <br>
+- Primer efficiency is calculated for each primer using a primer cost function. <br>
+- The program creates a primer graph with all valid forward and reverse primers combinations. The weight of each edge is the primer cost of its target. <br>
+- The user must input their gurobi ID and key in the "Creating Gurobipy Solver" section. <br> 
+- The user can tune the algorithm's hyperparameters (including the primer length range, maximum overlap and oligonucleotide length range)  <br> 
 - The program construct a few data structures necessary for the ILP, such as a dictionary of bins which store primers with overlapping indexes.<br>
-- Finally, ILP is executed using gurobi . 
-
+- ILP constraints are added based on primer overlap and single path constraints. <br>
+- Finally, ILP is executed using gurobi
 
 ## Tracking_Timings_Creation.ipynb
 
 - This program has similar inital setup to Mutagenesis, but it also iterates through many different coding sequence lengths & provides primer design outputs for each one. <br>
-- After it finishes iterating, it will save all of the relevant output data to a list and save it to a csv file.<br>
-- In addition, the program keeps track of time and memory usage for every part and records it for the user<br>
+- After the program finishes iterating, it will save all of the relevant output data to a list and save it to a csv file.<br>
+- In addition, the program keeps track of time and memory usage for every part and records it for the user <br>
 
 
