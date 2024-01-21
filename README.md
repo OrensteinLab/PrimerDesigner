@@ -3,12 +3,12 @@
 
 ## Introduction
  
-- This repository contains the source code for the PrimerDesigner project. <br>
-- The main goal of this project is to create an algorithm for primer design for protein synthesis using microarray oligonucleotide probes. <br>
-- Protein synthesis using microarray oligonucleotide probes is an efficient protein synthesis technique which enables high throughput protein mutagensis experiments.<br>
-- The algorithm aims to find the most efficient primer set with complete coverage and no cross hybridization risk.<br>
-- The program uses a primer graph to represent all valid forward and reverse primer combinations.<br>
-- It also uses Integer Linear Programming (ILP) with specific  overlap and single path constraints to find the best path in the primer graph.<br>
+This repository contains the source code for the PrimerDesigner project. <br>
+The main goal of this project is to create an algorithm for primer design for protein synthesis using microarray oligonucleotide probes. <br>
+Protein synthesis using microarray oligonucleotide probes is an efficient protein synthesis technique which enables high throughput protein mutagensis experiments.<br>
+The algorithm aims to find the most efficient primer set with complete coverage and no cross hybridization risk.<br>
+The program uses a primer graph to represent all valid forward and reverse primer combinations.<br>
+It also uses Integer Linear Programming (ILP) with specific  overlap and single path constraints to find the best path in the primer graph.<br>
 
 
 ## Requirments
@@ -39,20 +39,20 @@
 
 # Programs
 
-**Mutagensis.ipynb**
+## Mutagensis.ipynb**
 <br>
-* The import section installs and imports the necessary libraries. <br>
-* The setup subsection establishes the data structures required to carry out primer design (data_frame for primer costs, the actual DNA sequence).  <br>
-* Under Algorithm: first a primer graph is created, then the user must input their gurobi ID and key in the "Creating Gurobipy Solver" section. <br>
-* Next, the model hyperparameters( including primer length, maximum overlap and oligonucleotide length) are initalized.  <br>
-* The program construct a few data structures necessary for the ILP, such as a dictionary of bins which store primers with overlapping indexes.<br>
-* Finally, ILP is executed using gurobi . 
+- The import section installs and imports the necessary libraries. <br>
+- The setup subsection establishes the data structures required to carry out primer design (data_frame for primer costs, the actual DNA sequence).  <br>
+- Under Algorithm: first a primer graph is created, then the user must input their gurobi ID and key in the "Creating Gurobipy Solver" section. <br>
+- Next, the model hyperparameters( including primer length, maximum overlap and oligonucleotide length) are initalized.  <br>
+- The program construct a few data structures necessary for the ILP, such as a dictionary of bins which store primers with overlapping indexes.<br>
+- Finally, ILP is executed using gurobi . 
 <br>
 
-**Tracking_Timings_Creation.ipynb**
+## Tracking_Timings_Creation.ipynb
 <br>
-* This program has similar inital setup to Mutagenesis, but it also iterates through many different coding sequence lengths & provides primer design outputs for each one.
-* After it finishes iterating, it will save all of the relevant output data to a list and save it to a csv file.
-* In addition, the program keeps track of time and memory usage for every part and records it for the user
+- This program has similar inital setup to Mutagenesis, but it also iterates through many different coding sequence lengths & provides primer design outputs for each one.
+- After it finishes iterating, it will save all of the relevant output data to a list and save it to a csv file.
+- In addition, the program keeps track of time and memory usage for every part and records it for the user
 
 
