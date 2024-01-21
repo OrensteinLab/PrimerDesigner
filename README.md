@@ -51,8 +51,8 @@ It also uses Integer Linear Programming (ILP) with specific  overlap and single 
 
 ###  Tracking_Timings_Creation.ipynb
 <br>
-- This program has similar inital setup to Mutagenesis, but it also iterates through many different coding sequence lengths & provides primer design outputs for each one.
-- After it finishes iterating, it will save all of the relevant output data to a list and save it to a csv file.
-- In addition, the program keeps track of time and memory usage for every part and records it for the user
+- This program has similar inital setup to Mutagenesis, but it also iterates through many different coding sequence lengths & provides primer design outputs for each one. <br>
+- After it finishes iterating, it will save all of the relevant output data to a list and save it to a csv file.<br>
+- In addition, the program keeps track of time and memory usage for every part and records it for the user<br>
 
 
