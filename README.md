@@ -8,7 +8,7 @@ The main goal of this project is to create an algorithm for primer design for pr
 Protein synthesis using microarray oligos probes is an efficient protein synthesis technique which enables high throughput protein mutagensis experiments.
 The algorithm aims to find the most efficient primer set with complete coverage and no cross hybridization risk.
 The program uses a primer graph to represent all valid forward and reverse primer combinations.
-It also uses Integer Linear Programming (ILP) with specific  overlap and single path constraints to find the best best path in the primer graph.
+It also uses Integer Linear Programming (ILP) with specific  overlap and single path constraints to find the best path in the primer graph.
 
 
 # Requirments
