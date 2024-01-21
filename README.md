@@ -3,21 +3,21 @@
 
 ## Introduction
  
-This repository contains the source code for the PrimerDesigner project. <br>
-The main goal of this project is to create an algorithm for primer design for protein synthesis using microarray oligonucleotide probes. <br>
-Protein synthesis using microarray oligonucleotide probes is an efficient protein synthesis technique which enables high throughput protein mutagensis experiments.<br>
-The algorithm aims to find the most efficient primer set with complete coverage and no cross hybridization risk.<br>
-The program uses a primer graph to represent all valid forward and reverse primer combinations.<br>
-It also uses Integer Linear Programming (ILP) with specific  overlap and single path constraints to find the best path in the primer graph.<br>
+This repository contains the source code for the PrimerDesigner project. <br> <br>
+The main goal of this project is to create an algorithm for primer design for protein synthesis using microarray oligonucleotide probes. <br><br>
+Protein synthesis using microarray oligonucleotide probes is an efficient protein synthesis technique which enables high throughput protein mutagensis experiments.<br><br>
+The algorithm aims to find the most efficient primer set with complete coverage and no cross hybridization risk.<br><br>
+The program uses a primer graph to represent all valid forward and reverse primer combinations.<br><br>
+It also uses Integer Linear Programming (ILP) with specific  overlap and single path constraints to find the best path in the primer graph.<br><br>
 
 
 ## Requirments
 
-PrimerDesinger requires Python 3.7 or higher.<br>
-To run PrimerDesinger, you will need a local installation of Gurobi with an appropriate license (academic licenses are provided for free direct from Gurobi).<br>
-You will also need to install gurobipy and make sure that you are able to import it from within your local environment.<br>
-The installs are located at the top of the colab file. Note also that a large RAM may be required due to the space complexity of ILP solvers. <br>
-For the full sequence provided, a machine with 70 GB of RAM is sufficient. <br>
+PrimerDesinger requires Python 3.7 or higher.<br><br>
+To run PrimerDesinger, you will need a local installation of Gurobi with an appropriate license (academic licenses are provided for free direct from Gurobi).<br><br>
+You will also need to install gurobipy and make sure that you are able to import it from within your local environment.<br><br>
+The installs are located at the top of the colab file. Note also that a large RAM may be required due to the space complexity of ILP solvers. <br><br>
+For the full sequence provided, a machine with 70 GB of RAM is sufficient. <br><br>
 
 ## Getting Started
 <br>
