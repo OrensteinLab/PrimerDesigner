@@ -39,12 +39,12 @@ For the full sequence provided, a machine with 70 GB of RAM is sufficient.
 ## Getting Started
 <br>
 1. **Clone the Repository:**
-   ''''
+   ```
    
    git clone https://github.com/OrensteinLab/PrimerDesigner.git
    cd PrimerDesigner
    
-   ''''
+   ```
  <br>
 
 2. Open the Tracking_Timings_Creation.ipynb notebook using Jupyter or any compatible environment.
