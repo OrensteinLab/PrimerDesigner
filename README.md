@@ -23,12 +23,12 @@ For the full sequence provided, a machine with 70 GB of RAM is sufficient.
 
 ## Mutagensis.ipynb
 <br>
-* The import section installs and imports the necessary libraries.
-* The setup subsection establishes the data structures required to carry out primer design (data_frame for primer costs, the actual DNA sequence). 
-* Under Algorithm: first a primer graph is created, then the user must input their gurobi ID and key in the "Creating Gurobipy Solver" section.
-* Next, the model hyperparameters( including primer length, maximum overlap and oligonucleotide length) are initalized. 
-* The program construct a few data structures necessary for the ILP, such as a dictionary of bins which store primers with overlapping indexes.
-* Finally, ILP is executed using gurobi . 
+*The import section installs and imports the necessary libraries.
+*The setup subsection establishes the data structures required to carry out primer design (data_frame for primer costs, the actual DNA sequence). 
+*Under Algorithm: first a primer graph is created, then the user must input their gurobi ID and key in the "Creating Gurobipy Solver" section.
+*Next, the model hyperparameters( including primer length, maximum overlap and oligonucleotide length) are initalized. 
+*The program construct a few data structures necessary for the ILP, such as a dictionary of bins which store primers with overlapping indexes.
+*Finally, ILP is executed using gurobi . 
 
 ## Tracking_Timings_Creation.ipynb
 <br>
