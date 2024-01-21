@@ -3,7 +3,7 @@
 
 # Overview
  
-This repository contains the source code for the PrimerDesigner project. The main goal of this project is to create an algorithmfor primer design for oligo synthesis using microarray probes for protein mutegnesis experiments. The algorithm aims to find the most efficient primer set with complete coverage and no cross hybridization risk.  The program uses a primer graph to represent all valid forward and reverse primer combinations. It also uses Integer Linear Programming (ILP) with specific  overlap and single path constraints to find the best pest path in the primer graph.
+This repository contains the source code for the PrimerDesigner project. The main goal of this project is to create an algorithm for primer design for oligo synthesis using microarray probes for protein mutegnesis experiments. The algorithm aims to find the most efficient primer set with complete coverage and no cross hybridization risk.  The program uses a primer graph to represent all valid forward and reverse primer combinations. It also uses Integer Linear Programming (ILP) with specific  overlap and single path constraints to find the best pest path in the primer graph.
 
 
 # Requirments
