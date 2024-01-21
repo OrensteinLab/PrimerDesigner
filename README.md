@@ -46,11 +46,12 @@ For the full sequence provided, a machine with 70 GB of RAM is sufficient.
    ```
  
 <br>
+
 2. Open the Tracking_Timings_Creation.ipynb notebook using Jupyter or any compatible environment.
 
 <br>
 
 3. Run the Notebook:
-Execute the cells in the notebook to track timings and analyze the primer creation process.
+   Execute the cells in the notebook to track timings and analyze the primer creation process.
 
 
