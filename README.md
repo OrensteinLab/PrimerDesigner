@@ -37,7 +37,7 @@ It also uses Integer Linear Programming (ILP) with specific  overlap and single 
 
 
 ## Mutagensis.ipynb
-<br>
+
 - The import section installs and imports the necessary libraries. <br> 
 - The setup subsection establishes the data structures required to carry out primer design (data_frame for primer costs, the actual DNA sequence).  <br> 
 - Under Algorithm: first a primer graph is created, then the user must input their gurobi ID and key in the "Creating Gurobipy Solver" section. <br> 
@@ -47,7 +47,7 @@ It also uses Integer Linear Programming (ILP) with specific  overlap and single 
 
 
 ## Tracking_Timings_Creation.ipynb
-<br>
+
 - This program has similar inital setup to Mutagenesis, but it also iterates through many different coding sequence lengths & provides primer design outputs for each one. <br>
 - After it finishes iterating, it will save all of the relevant output data to a list and save it to a csv file.<br>
 - In addition, the program keeps track of time and memory usage for every part and records it for the user<br>
