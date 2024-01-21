@@ -38,7 +38,7 @@ For the full sequence provided, a machine with 70 GB of RAM is sufficient.
 
 ## Getting Started
 <br>
-1. **Clone the Repository:**
+1. Clone the Repository:
 
    ```
    git clone https://github.com/OrensteinLab/PrimerDesigner.git
