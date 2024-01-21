@@ -2,7 +2,7 @@
 # PrimerDesigner
 
 ## Overview
-
+ 
 This repository contains the source code for the PrimerDesigner project. The main focus of this project is to create an algorithm that designs the most efficient primer set for pcr mutagensis experiments with complete coverage and no cross hybridization risk. The algorithm uses a primer graph and Integer Linear Programming (ILP)
 
 
