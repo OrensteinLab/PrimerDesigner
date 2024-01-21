@@ -19,6 +19,21 @@ You will also need to install gurobipy and make sure that you are able to import
 The installs are located at the top of the colab file. Note also that a large RAM may be required due to the space complexity of ILP solvers. 
 For the full sequence provided, a machine with 70 GB of RAM is sufficient. 
 
+## Getting Started
+1. Clone the Repository:
+
+   ```
+   git clone https://github.com/OrensteinLab/PrimerDesigner.git
+   cd PrimerDesigner
+   ```
+<br>
+2. Open the Tracking_Timings_Creation.ipynb notebook using Jupyter or any compatible environment.
+<br>
+3. Run the Notebook:
+   Execute the cells in the notebook to track timings and analyze the primer creation process.
+
+
+
 # Programs
 
 **Mutagensis.ipynb**
@@ -35,23 +50,5 @@ For the full sequence provided, a machine with 70 GB of RAM is sufficient.
 * This program has similar inital setup to Mutagenesis, but it also iterates through many different coding sequence sequence lengths & provides primer design outputs for each one.
 * After it finishes iterating, it will save all of the relevant output data to a list and save it to a csv file.
 * In addition, the program keeps track of time and memory usage for every part and records it for the user
-
-## Getting Started
-<br>
-1. Clone the Repository:
-
-   ```
-   git clone https://github.com/OrensteinLab/PrimerDesigner.git
-   cd PrimerDesigner
-   ```
- 
-<br>
-
-2. Open the Tracking_Timings_Creation.ipynb notebook using Jupyter or any compatible environment.
-
-<br>
-
-3. Run the Notebook:
-   Execute the cells in the notebook to track timings and analyze the primer creation process.
 
 
