@@ -36,10 +36,7 @@ It also uses Integer Linear Programming (ILP) with specific  overlap and single 
    Execute the cells in the notebook to track timings and analyze the primer creation process.
 
 
-
-# Programs
-
-### Mutagensis.ipynb
+## Mutagensis.ipynb
 <br>
 - The import section installs and imports the necessary libraries. <br> 
 - The setup subsection establishes the data structures required to carry out primer design (data_frame for primer costs, the actual DNA sequence).  <br> 
@@ -49,7 +46,7 @@ It also uses Integer Linear Programming (ILP) with specific  overlap and single 
 - Finally, ILP is executed using gurobi . 
 
 
-###  Tracking_Timings_Creation.ipynb
+## Tracking_Timings_Creation.ipynb
 <br>
 - This program has similar inital setup to Mutagenesis, but it also iterates through many different coding sequence lengths & provides primer design outputs for each one. <br>
 - After it finishes iterating, it will save all of the relevant output data to a list and save it to a csv file.<br>
