@@ -36,7 +36,7 @@ It also uses Integer Linear Programming (ILP) with specific  overlap and single 
 
 
 ## Instructions
-<br>
+
 - Input your gurobi ID and key in the "Creating Gurobipy Solver" section. <br>
 <img width="341" alt="image" src="https://github.com/OrensteinLab/PrimerDesigner/assets/118123854/a266ad50-bb01-4f6e-a8b0-c2e236df913b"><br>
 <br>
