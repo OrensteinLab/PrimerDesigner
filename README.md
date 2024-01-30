@@ -54,7 +54,7 @@ It also uses Integer Linear Programming (ILP) with specific  overlap and single 
 <br>
 <br>
 
-- You can choose to apply threshold by setting the apply_threshold flag to True. You can adjust the min and max threshold on melting temeprature (tm) and gc contecnt. In addition, you can set the maxmimum allowed difference between forward and reverse primer melting temperatures.<br> <br>
+- You can choose to apply efficiency thresholds by setting the apply_threshold flag to True. You can adjust the min and max thresholds on melting temeprature (tm) and gc content. In addition, you can set the maxmimum allowed tm difference between the forward and reverse primers in every pair .<br> <br>
 <img width="474" alt="image" src="https://github.com/OrensteinLab/PrimerDesigner/assets/118123854/85ab62cf-c243-4067-9e5d-370bb7dc5b0f">
 <br>
 <br>
