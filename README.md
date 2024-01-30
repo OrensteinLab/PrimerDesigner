@@ -35,27 +35,10 @@ It also uses Integer Linear Programming (ILP) with specific  overlap and single 
 
 ## Instructions
 
-- Input your gurobi ID and key in the "Creating Gurobipy Solver" section. <br>
- <br>
-<img width="341" alt="image" src="https://github.com/OrensteinLab/PrimerDesigner/assets/118123854/a266ad50-bb01-4f6e-a8b0-c2e236df913b"><br>
-<br>
-<br>
-
-- Define upstream, mutreg and downstream regions based on the on your protein coding sequence <br>
- <br>
-<img width="656" alt="image" src="https://github.com/OrensteinLab/PrimerDesigner/assets/118123854/9d418c7b-425d-48ca-a510-d527e344f04f"><br>
-<br>
-<br>
-
-- You can adjust the algorithm's parameters. The parameters include the primer length range, overlap length range, oligonucleotide length range, number of proteins and maximum allowed overlap between primers <br> <br>
-<img width="475" alt="image" src="https://github.com/OrensteinLab/PrimerDesigner/assets/118123854/a645bac2-9054-47c6-9327-824245db8048"><br>
-<br>
-<br>
-
-- You can choose to apply efficiency thresholds by setting the apply_threshold flag to True. You can adjust the min and max thresholds on melting temeprature (tm) and gc content. In addition, you can set the maximum allowed tm difference between the forward and reverse primers in every pair .<br> <br>
-<img width="474" alt="image" src="https://github.com/OrensteinLab/PrimerDesigner/assets/118123854/85ab62cf-c243-4067-9e5d-370bb7dc5b0f">
-<br>
-<br>
+- Input your gurobi ID and key in the beginning of the "ILP functions" section <br>
+- Define upstream, mutreg and downstream regions based on the on your protein coding sequence in the "Full Sequence" section <br>
+- You can adjust the algorithm's parameters in the "Parameters" section. The parameters include the primer length range, overlap length range, oligonucleotide length range, number of proteins and maximum allowed overlap between primers <br> 
+- You can choose to apply efficiency thresholds in the "Parameters" section by setting the apply_threshold flag to True. You can adjust the min and max thresholds on melting temeprature (tm) and gc content. In addition, you can set the maximum allowed tm difference between the forward and reverse primers in every pair .<br> 
 
 
 
