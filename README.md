@@ -28,24 +28,27 @@ It also uses Integer Linear Programming (ILP) with specific  overlap and single 
    cd PrimerDesigner
    ```
 <br>
-2. Open the Tracking_Timings_Creation.ipynb notebook using Jupyter or any compatible environment.
+2. Open the PrimerDeisgner.ipynb notebook using Jupyter or any compatible environment.
 <br>
 <br>
 3. Run the Notebook:
    Execute the cells in the notebook to track timings and analyze the primer creation process.
 
 
-## Mutagensis.ipynb
+## Instruction
+- Input your gurobi ID and key in the "Creating Gurobipy Solver" section. <br>
+  <img width="341" alt="image" src="https://github.com/OrensteinLab/PrimerDesigner/assets/118123854/a266ad50-bb01-4f6e-a8b0-c2e236df913b"><br>
 
-- The import section installs and imports the necessary libraries. <br> 
-- The setup subsection establishes the data structures required to carry out primer design (i.e data_frame for primer sequences information).  <br>
-- Primer efficiency is calculated for each primer using a primer cost function. <br>
-- The program creates a primer graph with all valid forward and reverse primers combinations. The weight of each edge is the primer cost of its target. <br>
-- The user must input their gurobi ID and key in the "Creating Gurobipy Solver" section. <br> 
-- The user can tune the algorithm's hyperparameters (including the primer length range, maximum overlap and oligonucleotide length range)  <br> 
-- The program construct a few data structures necessary for the ILP, such as a dictionary of bins which store primers with overlapping indexes.<br>
-- ILP constraints are added based on primer overlap and single path constraints. <br>
-- Finally, ILP is executed using gurobi
+- Define upstream, mutreg and downstream regions based on the sequence you want to run the program on <br>
+<img width="656" alt="image" src="https://github.com/OrensteinLab/PrimerDesigner/assets/118123854/9d418c7b-425d-48ca-a510-d527e344f04f"><br>
+
+- Adjust  algorithm's parameters. Parameters include the primer length range, overlap length range, oligonucleotide length range, number of proteins and maximum allowed overlap <br>
+<img width="475" alt="image" src="https://github.com/OrensteinLab/PrimerDesigner/assets/118123854/a645bac2-9054-47c6-9327-824245db8048"><br>
+
+- You can choose to apply threshold by setting the apply_threshold flag to True. You can adjust the min and max threshold on melting temeprature (tm) and gc contecnt. In addition, you can set the maxmimum allowed difference between forward and reverse primer melting temperatures.<br>
+- <img width="474" alt="image" src="https://github.com/OrensteinLab/PrimerDesigner/assets/118123854/85ab62cf-c243-4067-9e5d-370bb7dc5b0f">
+
+
 
 ## Tracking_Timings_Creation.ipynb
 
