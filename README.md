@@ -38,30 +38,26 @@ It also uses Integer Linear Programming (ILP) with specific  overlap and single 
 ## Instructions
 
 - Input your gurobi ID and key in the "Creating Gurobipy Solver" section. <br>
+ <br>
 <img width="341" alt="image" src="https://github.com/OrensteinLab/PrimerDesigner/assets/118123854/a266ad50-bb01-4f6e-a8b0-c2e236df913b"><br>
 <br>
 <br>
 
 - Define upstream, mutreg and downstream regions based on the on your protein coding sequence <br>
+ <br>
 <img width="656" alt="image" src="https://github.com/OrensteinLab/PrimerDesigner/assets/118123854/9d418c7b-425d-48ca-a510-d527e344f04f"><br>
 <br>
 <br>
 
-- Adjust  algorithm's parameters. Parameters include the primer length range, overlap length range, oligonucleotide length range, number of proteins and maximum allowed overlap <br>
+-You can adjust the algorithm's parameters. The parameters include the primer length range, overlap length range, oligonucleotide length range, number of proteins and maximum allowed overlap between primers <br> <br>
 <img width="475" alt="image" src="https://github.com/OrensteinLab/PrimerDesigner/assets/118123854/a645bac2-9054-47c6-9327-824245db8048"><br>
 <br>
 <br>
 
-- You can choose to apply threshold by setting the apply_threshold flag to True. You can adjust the min and max threshold on melting temeprature (tm) and gc contecnt. In addition, you can set the maxmimum allowed difference between forward and reverse primer melting temperatures.<br>
+- You can choose to apply threshold by setting the apply_threshold flag to True. You can adjust the min and max threshold on melting temeprature (tm) and gc contecnt. In addition, you can set the maxmimum allowed difference between forward and reverse primer melting temperatures.<br> <br>
 <img width="474" alt="image" src="https://github.com/OrensteinLab/PrimerDesigner/assets/118123854/85ab62cf-c243-4067-9e5d-370bb7dc5b0f">
 <br>
 <br>
 
-
-## Tracking_Timings_Creation.ipynb
-
-- This program has similar inital setup to Mutagenesis, but it also iterates through many different coding sequence lengths & provides primer design outputs for each one. <br>
-- After the program finishes iterating, it will save all of the relevant output data to a list and save it to a csv file.<br>
-- In addition, the program keeps track of time and memory usage for every part and records it for the user <br>
 
 
