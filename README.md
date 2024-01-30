@@ -49,7 +49,7 @@ It also uses Integer Linear Programming (ILP) with specific  overlap and single 
 <br>
 <br>
 
--You can adjust the algorithm's parameters. The parameters include the primer length range, overlap length range, oligonucleotide length range, number of proteins and maximum allowed overlap between primers <br> <br>
+- You can adjust the algorithm's parameters. The parameters include the primer length range, overlap length range, oligonucleotide length range, number of proteins and maximum allowed overlap between primers <br> <br>
 <img width="475" alt="image" src="https://github.com/OrensteinLab/PrimerDesigner/assets/118123854/a645bac2-9054-47c6-9327-824245db8048"><br>
 <br>
 <br>
