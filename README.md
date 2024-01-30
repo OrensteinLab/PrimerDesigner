@@ -2,7 +2,6 @@
 # PrimerDesigner
 
 ## Introduction
- <br>
 This repository contains the source code for the PrimerDesigner project. 
 The main goal of this project is to create an algorithm for primer design for protein synthesis using microarray oligonucleotide probes. 
 The algorithm aims to find the most efficient primer set with complete coverage and no cross hybridization risk.
