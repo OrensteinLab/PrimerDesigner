@@ -45,7 +45,6 @@ It also uses Integer Linear Programming (ILP) with specific  overlap and single 
   env = gp.Env(params=params)
 
 ```
-<br>
 - Define upstream, mutreg and downstream regions based on the on your protein coding sequence in the "Full Sequence" section <br><br>
 
 ```
@@ -54,8 +53,6 @@ mutreg_nt_full = "CAAAGCCCAGCACCTGCCGCAGCGCCTGCCCCTGCGGCACGTTCCATCGCAGCTACGCCTCC
 downstream_nt = "GGAGGAGGGTCTGGGGGAGGAGGCAGTGGCATGGTGAGCAAGGGCGAGGAGCTGTTCACCGGGGTGGTGCCCATCCTGGTCGAGCTG..."
 
 ```
-
-<br>
 - You can adjust the algorithm's parameters in the "Parameters" section. The parameters include the primer length range, overlap length range, oligonucleotide length range, number of proteins and maximum allowed overlap between primers <br><br>
 
 ```
@@ -66,7 +63,6 @@ num_proteins = 3
 allowed_overlap = 6
 
 ```
-<br>
 - You can choose to apply efficiency thresholds in the "Parameters" section by setting the apply_threshold flag to True. You can adjust the min and max thresholds on melting temeprature (tm) and gc content. In addition, you can set the maximum allowed tm difference between the forward and reverse primers in every pair .<br> 
 <br>
 
