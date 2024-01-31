@@ -11,8 +11,8 @@ It also uses Integer Linear Programming (ILP) with specific  overlap and single 
 
 ## Requirments
 
-- PrimerDesinger requires Python 3.7 or higher.<br>
-- To run PrimerDesinger, you will need a local installation of Gurobi with an appropriate license (academic licenses are provided for free direct from Gurobi).<br>
+- PrimerDesigner requires Python 3.7 or higher.<br>
+- To run PrimerDesigner, you will need a local installation of Gurobi with an appropriate license (academic licenses are provided for free direct from Gurobi).<br>
 - You will also need to install gurobipy and make sure that you are able to import it from within your local environment.<br>
 - The installs are located at the top of the colab file. Note also that a large RAM may be required due to the space complexity of ILP solvers. <br>
 - For the full sequence provided, a machine with 70 GB of RAM is sufficient. <br>
