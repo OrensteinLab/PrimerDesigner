@@ -37,6 +37,7 @@ It also uses Integer Linear Programming (ILP) with specific  overlap and single 
 
 - Input your gurobi ID and key in the beginning of the "ILP functions" section <br><br>
 ```
+# input gurobi license Id and key
   params = {
   "WLSACCESSID":"",
   "WLSSECRET":"",
@@ -48,6 +49,7 @@ It also uses Integer Linear Programming (ILP) with specific  overlap and single 
 - Define upstream, mutreg and downstream regions based on the on your protein coding sequence in the "Full Sequence" section <br><br>
 
 ```
+# define sequenes 
 upstream_nt = "ATTTGAATGTATTTAGAAAAATAAACAAATAGGGGTTCCGCGCACATTTCCCCGAAAAGTGCTAGTGGTGCTAGCCCCGCGAAATTAAT..."
 mutreg_nt_full = "CAAAGCCCAGCACCTGCCGCAGCGCCTGCCCCTGCGGCACGTTCCATCGCAGCTACGCCTCCTAAACTGATCGTGGCAATTAGCGT..."
 downstream_nt = "GGAGGAGGGTCTGGGGGAGGAGGCAGTGGCATGGTGAGCAAGGGCGAGGAGCTGTTCACCGGGGTGGTGCCCATCCTGGTCGAGCTG..."
@@ -56,7 +58,8 @@ downstream_nt = "GGAGGAGGGTCTGGGGGAGGAGGCAGTGGCATGGTGAGCAAGGGCGAGGAGCTGTTCACCGGG
 - You can adjust the algorithm's parameters in the "Parameters" section. The parameters include the primer length range, overlap length range, oligonucleotide length range, number of proteins and maximum allowed overlap between primers <br><br>
 
 ```
-primer_lmin, primer_lmax = 18, 30 # PARAM: primer lengths (inclusive)
+# algorithm parameters
+primer_lmin, primer_lmax = 18, 30 
 overlap_lmin,overlap_lmax = 45,50
 oligo_lmin,oligo_lmax = 195,205
 num_proteins = 3
@@ -67,6 +70,7 @@ allowed_overlap = 6
 <br>
 
 ```
+# threshold params
 apply_threshold= True # apply threshold flag.
 min_gc=40
 max_gc=60
