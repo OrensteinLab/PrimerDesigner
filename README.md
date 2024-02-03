@@ -13,7 +13,7 @@ It also uses Integer Linear Programming (ILP) with specific  overlap and single 
 
 - PrimerDesigner requires Python 3.7 or higher.<br>
 - To run PrimerDesigner, you will need a local installation of Gurobi with an appropriate license (academic licenses are provided for free direct from Gurobi).<br>
-- You will also need to install gurobipy and make sure that you are able to import it from within your local environment.<br>
+- You will also need to make sure that you are able to import Gurobi from within your local environment.<br>
 - The installs are located at the top of the colab file. Note also that a large RAM may be required due to the space complexity of ILP solvers. <br>
 - For the full sequence provided, a machine with 70 GB of RAM is sufficient. <br>
 
@@ -30,14 +30,14 @@ It also uses Integer Linear Programming (ILP) with specific  overlap and single 
 <br>
 <br>
 3. Run the Notebook:
-   Execute the cells in the notebook to track timings and analyze the primer creation process.
+   Execute the cells in the notebook to track timings and analyze the primer design process.
 
 
 ## Instructions
 
 - Input your gurobi ID and key in the beginning of the "ILP functions" section <br><br>
 ```
-# input gurobi license Id and key
+# input gurobi license id and key
   params = {
   "WLSACCESSID":"",
   "WLSSECRET":"",
@@ -49,7 +49,7 @@ It also uses Integer Linear Programming (ILP) with specific  overlap and single 
 - Define upstream, mutreg and downstream regions based on the on your protein coding sequence in the "Full Sequence" section <br><br>
 
 ```
-# define sequenes 
+# define sequences 
 upstream_nt = "ATTTGAATGTATTTAGAAAAATAAACAAATAGGGGTTCCGCGCACATTTCCCCGAAAAGTGCTAGTGGTGCTAGCCCCGCGAAATTAAT..."
 mutreg_nt_full = "CAAAGCCCAGCACCTGCCGCAGCGCCTGCCCCTGCGGCACGTTCCATCGCAGCTACGCCTCCTAAACTGATCGTGGCAATTAGCGT..."
 downstream_nt = "GGAGGAGGGTCTGGGGGAGGAGGCAGTGGCATGGTGAGCAAGGGCGAGGAGCTGTTCACCGGGGTGGTGCCCATCCTGGTCGAGCTG..."
@@ -76,7 +76,7 @@ min_gc=40
 max_gc=60
 min_tm=58
 max_tm=65
-max_difference=3
+max_difference=3 # max tm difference between forward & reverse primers
 
 ```
 <br>
