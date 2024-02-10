@@ -46,7 +46,7 @@ It also uses Integer Linear Programming (ILP) with specific  overlap and single 
   env = gp.Env(params=params)
 
 ```
-- Define upstream, mutreg and downstream regions based on the on your protein coding sequence in the "Full Sequence" section <br><br>
+- Define upstream, mutreg and downstream regions based on your protein coding sequence in the "Full Sequence" section <br><br>
 
 ```
 # define sequences 
