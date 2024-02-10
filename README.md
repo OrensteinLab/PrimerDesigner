@@ -55,7 +55,7 @@ mutreg_nt_full = "CAAAGCCCAGCACCTGCCGCAGCGCCTGCCCCTGCGGCACGTTCCATCGCAGCTACGCCTCC
 downstream_nt = "GGAGGAGGGTCTGGGGGAGGAGGCAGTGGCATGGTGAGCAAGGGCGAGGAGCTGTTCACCGGGGTGGTGCCCATCCTGGTCGAGCTG..."
 
 ```
-- You can adjust the algorithm's parameters in the "Parameters" section. The parameters include the primer length range, overlap length range, oligonucleotide length range, number of proteins and maximum allowed overlap between primers <br><br>
+- You can adjust the algorithm parameters in the "Parameters" section. The parameters include the primer length range, overlap length range, oligonucleotide length range, number of proteins and maximum allowed overlap between primers <br><br>
 
 ```
 # algorithm parameters
