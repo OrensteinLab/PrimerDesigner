@@ -6,7 +6,7 @@ This repository contains the source code for the PrimerDesigner project.
 The main goal of this project is to create an algorithm for primer design for protein synthesis using microarray oligonucleotide probes. 
 The algorithm aims to find the most efficient primer set with complete coverage and no cross hybridization risk.
 The program uses a primer graph to represent all valid forward and reverse primer combinations.
-It also uses Integer Linear Programming (ILP) with specific  overlap and single path constraints to find the best path in the primer graph.
+It also uses Integer Linear Programming (ILP) with specific forbidden pair and single path constraints to find the best path in the primer graph.
 
 
 ## Requirments
@@ -26,7 +26,7 @@ It also uses Integer Linear Programming (ILP) with specific  overlap and single 
    cd PrimerDesigner
    ```
 <br>
-2. Open the PrimerDeisgner.ipynb notebook using Jupyter or any compatible environment.
+2. Open the PrimerDeisgner_relaxed.ipynb or PrimerDeisgner_non_relaxed.ipynb notebook using Jupyter or any compatible environment.
 <br>
 <br>
 3. Run the Notebook:
@@ -35,7 +35,7 @@ It also uses Integer Linear Programming (ILP) with specific  overlap and single 
 
 ## Instructions
 
-- Input your gurobi ID and key in the beginning of the "ILP functions" section <br><br>
+- Input your gurobi ID and key in the beginning of the Gurobi Setup section <br><br>
 ```
 # input gurobi license id and key
   params = {
