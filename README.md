@@ -46,7 +46,7 @@ It also uses Integer Linear Programming (ILP) with specific forbidden pair and s
   env = gp.Env(params=params)
 
 ```
-- Define upstream, mutreg and downstream regions based on your protein coding sequence in the "Full Sequence" section <br><br>
+- Define upstream, mutreg and downstream regions based on your protein coding sequence in the "Protein Sequences" section <br><br>
 
 ```
 # define sequences 
@@ -59,11 +59,13 @@ downstream_nt = "GGAGGAGGGTCTGGGGGAGGAGGCAGTGGCATGGTGAGCAAGGGCGAGGAGCTGTTCACCGGG
 
 ```
 # algorithm parameters
-primer_lmin, primer_lmax = 18, 30 
+# adjust algorithm parameters
+primer_lmin, primer_lmax = 18, 30
 overlap_lmin,overlap_lmax = 45,50
 oligo_lmin,oligo_lmax = 195,205
-num_proteins = 3
 allowed_overlap = 6
+max_tm = 45
+mutreg_start = len(upstream_nt)
 
 ```
 - You can choose to apply efficiency thresholds in the "Parameters" section by setting the apply_threshold flag to True. You can adjust the min and max thresholds on melting temeprature (tm) and gc content. In addition, you can set the maximum allowed tm difference between the forward and reverse primers in every pair .<br> 
