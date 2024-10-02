@@ -17,6 +17,7 @@ def run_ilp(single_forbidden, multiple_forbidden, protein_names, graphs):
     Returns:
         tuple: Contains model statistics and paths for each protein.
     """
+    print("Running ILP")
 
     # Measure setup time and memory usage
     setup_start = time.time()

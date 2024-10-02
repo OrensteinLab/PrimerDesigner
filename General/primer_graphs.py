@@ -4,6 +4,7 @@ import networkx as nx
 
 
 def create_graph(primer_df, primer_f, mutreg_l,args):
+    print("Creating graph")
     # initialize graph
     G = nx.DiGraph()
 

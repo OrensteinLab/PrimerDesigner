@@ -1,7 +1,7 @@
 import pandas as pd
 import primer3 as p3
 from Bio.Seq import Seq
-from Bio.SeqUtils import GC, seq1, seq3
+from Bio.SeqUtils import gc_fraction
 from General.constants import *
 
 
@@ -18,6 +18,7 @@ def subsequences(sequence,primer_lmin,primer_lmax): #Generates all subsequences 
   return ls
 
 def create_primer_df(sequence_nt,args):
+  print("Creating primer df")
   # sets up pcr reaction with parameters
   pcr = p3.thermoanalysis.ThermoAnalysis(dna_conc=250,
                                          mv_conc=50,
@@ -46,7 +47,7 @@ def create_primer_df(sequence_nt,args):
   primer_df.sort_values(by=['start','stop','fr'], inplace=True)
 
   #Calculating "Cost" Values
-  primer_df['gc'] = primer_df.seq.apply(GC)
+  primer_df['gc'] = primer_df.seq.apply(gc_fraction)
   primer_df['tm'] = primer_df.seq.apply(pcr.calc_tm)
   res = primer_df.seq.apply(lambda s: pcr.calc_hairpin(s).todict())
   primer_df['hp_tm'] = res.apply(lambda res: res['tm'])
@@ -54,6 +55,7 @@ def create_primer_df(sequence_nt,args):
   res = primer_df.seq.apply(lambda s: pcr.calc_homodimer(s).todict())
   primer_df['ho_tm'] = res.apply(lambda res: res['tm'])
   primer_df['ho_dg'] = res.apply(lambda res: res['dg']*1e-3)
+
 
   def primer_cost(primer):
     # calculates primer cost based on homodimer an haipin delta G, tm cost, and len cost
@@ -76,6 +78,8 @@ def create_primer_df(sequence_nt,args):
   primer_f = primer_df.query('fr=="f"').reset_index(drop=True)
 
   primer_df.set_index(['start','stop','fr'], inplace=True)
+
+  print(primer_df)
 
   return primer_f, primer_df
 

@@ -3,7 +3,7 @@ import argparse
 def get_args():
 
     parser = argparse.ArgumentParser(description='Process some sequences.')
-    parser.add_argument('--version', type=str, default='Relaxed', help='Version to use. Options: relaxed, non-relaxed or extension', choices=['Relaxed', 'Non_relaxed', 'Extension'])
+    parser.add_argument('--version', type=str, default='PD-mul-var', help='Version to use. Options: PD-mul-var, Non_relaxed,PD-mul-nh, PD-single', choices=['PD-mul-var', 'Non_relaxed', 'PD-mul-nh','PD-single'])
     parser.add_argument('--file_path', type=str, required=True, help='Path of the input file')
     parser.add_argument('--output', type=str, required=True, help='Path of the csv program output file')
     parser.add_argument('--primer_lmin', type=int, default=18, help='Minimum primer length')
