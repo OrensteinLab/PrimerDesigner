@@ -27,13 +27,13 @@ def create_graphs(mutreg_regions, sequences_nt, protein_names,args):
         print("Creating Graph for protein: ",i)
 
         # Create primer dataframe for the given sequence
-        primer_f, primer_df = create_primer_df(sequence,args)
+        primer_df = create_primer_df(sequence,args)
 
         primer_dfs[protein_name] = primer_df
 
         mutreg_l = len(mutreg_nt)
 
-        graphs[protein_name] = create_graph(primer_df,primer_f,mutreg_l,args)
+        graphs[protein_name] = create_graph(primer_df,mutreg_l,args)
 
     # Measure the graph creation time and memory usage
     graph_time = int(time.time() - start_time)

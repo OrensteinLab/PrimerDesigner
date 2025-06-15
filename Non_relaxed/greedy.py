@@ -2,7 +2,7 @@ import itertools as it
 import networkx as nx
 import pandas as pd
 
-def run_greedy(graphs, primer_dfs,multiple_forbidden,protein_names):
+def run_greedy(graphs, primer_dfs, multiple_forbidden, protein_names):
 
   path_ls = {}
 
@@ -18,6 +18,7 @@ def run_greedy(graphs, primer_dfs,multiple_forbidden,protein_names):
         pn_forbidden = ((p[0],p[1]),(n[0],n[1])) in multiple_forbidden[(other_protein,protein)]
         if pn_forbidden:
           nodes_to_remove.append(n)
+
     G_sub.remove_nodes_from(set(nodes_to_remove))
     try:
       path_ls[protein]= [primer for primer in nx.algorithms.shortest_path(G_sub,'s','d', weight='weight')][1:-1]

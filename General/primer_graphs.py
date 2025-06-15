@@ -3,54 +3,71 @@ from General.primer_data import *
 import networkx as nx
 
 
-def create_graph(primer_df, primer_f, mutreg_l,args):
+def create_graph(primer_df, mutreg_l, args):
+
     print("Creating graph")
+
     # initialize graph
     G = nx.DiGraph()
 
-    ## all forward primers that end before mutreg and pass threshold
-    primers_init = [Primer(primer_df, p.start, p.stop) for _, p in primer_f.query('stop<=0').iterrows() if
-                    check_threshold(p.tm, p.gc,args)]
-    for primer in primers_init:
-        G.add_edge('s', primer.tup(), weight=primer.w)  # i ntializing the s-primer connection
-        dfs(G, primer,primer_df,mutreg_l,args)  # create the rest of the graph
+    tm_dict = primer_df['tm'].to_dict()
+    gc_dict = primer_df['gc'].to_dict()
 
-    print(G)
+    # all forward primers that end before mutreg and pass threshold
+    primers_init = []
+    for row in primer_df.reset_index().itertuples(index=False):
+        if row.stop <= 0 and row.fr == "f" and check_threshold(row.tm, row.gc, args):
+            try:
+                primers_init.append(Primer(primer_df, row.start, row.stop))
+            except Exception as e:
+                print(f"Failed to construct primer for {key}: {e}")
+
+    for primer in primers_init:
+        key = primer.tup()
+        G.add_edge('s', key, weight=primer.w)
+        dfs(G, primer, primer_df, mutreg_l, args, tm_dict, gc_dict)
 
     return G
 
 
-def dfs(G, primer, primer_df, mutreg_l,args):  # CREATING the graph using DFS
+def dfs(G, primer, primer_df, mutreg_l, args, tm_dict, gc_dict):
 
-    tm = primer_df.at[primer.tup(), 'tm']
-    gc = primer_df.at[primer.tup(), 'gc']
+    key = primer.tup()
 
-    # base case (end)
-    if (primer.start >= mutreg_l) and primer.is_r and check_threshold(tm, gc,args):
-        G.add_edge(primer.tup(), 'd', weight=0.)  # G is global variable defined in next section
+    tm = tm_dict[key]
+    gc = gc_dict[key]
+
+    if (primer.start >= mutreg_l) and primer.is_r and check_threshold(tm, gc, args):
+
+        G.add_edge(key, 'd', weight=0.0)
         return
 
-    for next_primer in actions(primer_df, primer,args):
+    for next_primer in actions(primer_df, primer, args):
 
-        is_new = not G.has_node(next_primer.tup())  # check if primer node exists already
+        next_key = next_primer.tup()
 
-        tm = primer_df.at[next_primer.tup(), 'tm']
-        gc = primer_df.at[next_primer.tup(), 'gc']
+        is_new = not G.has_node(next_key)
 
-        passes_threshold = check_threshold(tm, gc,args)  # check if primer passes threshold
+        tm_next = tm_dict[next_key]
+        gc_next = gc_dict[next_key]
 
-        # only add edge if primer passes threshold
-        if passes_threshold:
-            G.add_edge(primer.tup(), next_primer.tup(), weight=next_primer.w)  # weight is the cost of the new primer
-        if passes_threshold and is_new:
-            dfs(G, next_primer, primer_df, mutreg_l,args)  # recursive call to dfs
+        if check_threshold(tm_next, gc_next, args):
+            G.add_edge(key, next_key, weight=next_primer.w)
+            if is_new:
+                dfs(G, next_primer, primer_df, mutreg_l, args, tm_dict, gc_dict)
 
 
-def paths_ct(G, u, d):  # count total # of paths between two points
+def check_threshold(tm, gc, args):
+    
+    if not args.apply_threshold:
+        return True
 
-    if u == d:
-        return 1
-    else:
-        if not G.nodes[u]:  # npaths attribute is the # of paths out of u
-            G.nodes[u]['npaths'] = sum(paths_ct(G, c, d) for c in G.successors(u))
-        return G.nodes[u]['npaths']
+    # Convert thresholds
+    gc_min = args.min_gc / 100.0
+    gc_max = args.max_gc / 100.0
+    tm_min = float(args.min_tm)
+    tm_max = float(args.max_tm)
+
+    passed = gc_min <= gc <= gc_max and tm_min <= tm <= tm_max
+    
+    return passed

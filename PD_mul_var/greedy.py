@@ -5,6 +5,8 @@ import networkx as nx
 
 def run_greedy(G, primer_df,args):
 
+  print("Running greedy algorithm")
+
   path_ls = [[]]
   G_sub = G.copy()
   for i in range(args.num_proteins):
@@ -23,16 +25,23 @@ def run_greedy(G, primer_df,args):
 
   path_ls = path_ls[1:]
 
-  # # https://pandas.pydata.org/pandas-docs/stable/user_guide/merging.html
-  primer_set = pd.DataFrame()
-  for i,primer_ls in enumerate(path_ls):
-    primer_set1 = primer_df.loc[primer_ls].copy().reset_index()
-    primer_set1['lib_i'] = i
-    primer_set = pd.concat([primer_set, primer_set1])
-  primer_set['tile_i'] = primer_set.groupby(['lib_i','fr']).cumcount()
-  primer_set = primer_set[['lib_i','tile_i']+primer_set.columns[:-2].to_list()]
+  primer_set = []
 
-  #print(primer_set.groupby('lib_i').cost.sum())
-  cost = primer_set.cost.sum()
+  for primer_ls in path_ls:
+    if not primer_ls:
+      continue
+    try:
+      primers = primer_df.loc[primer_ls]
+      primer_set.append(primers)
+    except KeyError:
+      print("WARNING: Some primers in the path were not found in primer_df.")
+      continue
 
-  return path_ls, cost
+  if not primer_set:
+    print("No valid primer paths were found.")
+    return path_ls, float("inf")
+
+  primer_set = pd.concat(primer_set)
+  total_cost = primer_set["cost"].sum()
+
+  return path_ls, total_cost

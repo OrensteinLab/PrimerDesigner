@@ -1,21 +1,17 @@
 import pandas as pd
 import primer3 as p3
 from Bio.Seq import Seq
-from Bio.SeqUtils import gc_fraction
-from General.constants import *
+from General.utils import *
 
+def calc_gc(seq):
+    """Calculate GC content as a fraction, ignoring non-ACGT characters."""
+    seq = seq.upper()
+    valid_bases = [base for base in seq if base in 'ACGT']
+    if not valid_bases:
+        return 0.0
+    gc_count = sum(1 for base in valid_bases if base in 'GC')
+    return (gc_count / len(valid_bases))
 
-def revcomp(seq):
-  return str(Seq(seq).reverse_complement())
-
-def subsequences(sequence,primer_lmin,primer_lmax): #Generates all subsequences w/ all poss. start-stop pairs
-  ls = []
-  for j in range(primer_lmin, primer_lmax+1): #length
-    for i in range(len(sequence)-j+1): #starting index
-      start = i
-      stop = i+j
-      ls.append([sequence[start:stop], start, stop, stop-start])
-  return ls
 
 def create_primer_df(sequence_nt,args):
   print("Creating primer df")
@@ -47,7 +43,7 @@ def create_primer_df(sequence_nt,args):
   primer_df.sort_values(by=['start','stop','fr'], inplace=True)
 
   #Calculating "Cost" Values
-  primer_df['gc'] = primer_df.seq.apply(gc_fraction)
+  primer_df['gc'] = primer_df.seq.apply(calc_gc)
   primer_df['tm'] = primer_df.seq.apply(pcr.calc_tm)
   res = primer_df.seq.apply(lambda s: pcr.calc_hairpin(s).todict())
   primer_df['hp_tm'] = res.apply(lambda res: res['tm'])
@@ -75,20 +71,8 @@ def create_primer_df(sequence_nt,args):
   primer_df['cost'] = primer_df.apply(primer_cost, axis=1)
 
   primer_df.reset_index(inplace=True)
-  primer_f = primer_df.query('fr=="f"').reset_index(drop=True)
 
   primer_df.set_index(['start','stop','fr'], inplace=True)
 
-  print(primer_df)
+  return primer_df
 
-  return primer_f, primer_df
-
-def check_threshold(tm,gc,args):
-  # returns false only if the threshold flag is on and primers did not pass threshold
-  if not args.apply_threshold:
-    return True
-  else:
-    if args.min_gc <= gc <= args.max_gc and  args.min_tm <= tm <=args.max_tm:
-      return True
-    else:
-      return False

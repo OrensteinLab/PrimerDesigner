@@ -1,15 +1,14 @@
 from General.primer_graphs import *
 from General.primer_data import *
-from General.constants import *
+from General.utils import *
 import networkx as nx
 import primer3 as p3
 import time
 import pandas as pd
 
-mutreg_start=len(upstream_nt)
+mutreg_start= len(upstream_nt)
 
-
-def run_extension(sequences_nt, mutreg_regions,protein_names, args):
+def run_pd_mul_nh(sequences_nt, mutreg_regions,protein_names, args):
     start_time = time.time()
     greedy_solution, greedy_obj, cross_cnt, protein_cnt, re_iterations = run_greedy(sequences_nt, mutreg_regions,protein_names,args)
     greedy_time = time.time() - start_time
@@ -41,11 +40,12 @@ def run_greedy(sequences_nt, mutreg_regions,protein_names, args):
 
     for i,(seq_nt, mutreg_nt,protein) in enumerate(zip(sequences_nt, mutreg_regions,protein_names)):
 
-        print("Running protein number:",i)
+        if i % 10 == 0:
+            print(f"Running protein {i}/{len(sequences_nt)}")
 
-        primer_f, primer_df = create_primer_df(seq_nt,args)
+        primer_df = create_primer_df(seq_nt,args)
 
-        G = create_graph(primer_df, primer_f,len(mutreg_nt),args)
+        G = create_graph(primer_df, len(mutreg_nt),args)
 
         cross= True
 
@@ -61,22 +61,24 @@ def run_greedy(sequences_nt, mutreg_regions,protein_names, args):
             nodes_to_remove=[]
 
             # Find the shortest path, excluding the start ('s') and end ('d') nodes
-            shortest_path = nx.algorithms.shortest_path(G, 's', 'd', weight='weight')[1:-1]
+            try:
+                shortest_path = nx.algorithms.shortest_path(G, 's', 'd', weight='weight')[1:-1]
+            except nx.NetworkXNoPath:
+                print(f"No valid path found for {protein}. Skipping.")
+                break
 
             cross = False
 
-            for primer in shortest_path:
+            primer_seqs = {
+                (start, end, fr): seq_nt[start + mutreg_start:end + mutreg_start]
+                for (start, end, fr) in shortest_path
+            }
 
-                start, end, fr = primer
+            for primer, primer_seq in primer_seqs.items():
+                for other_seq in selected_primers:
+                    tm = calc_tm(other_seq, primer_seq)
 
-                # Calculate the primer sequence
-                primer_seq = seq_nt[start+mutreg_start:end+mutreg_start]  # Assuming start and end are relative to the sequence
-
-                for other_primer in selected_primers:
-
-                    tm = p3.bindings.calc_heterodimer(other_primer, primer_seq, mv_conc=50.0, dv_conc=1.5, dntp_conc=0.6,
-                                                      dna_conc=50.0, temp_c=37.0, max_loop=30).tm
-                    if tm >= 45:
+                    if tm >= MAX_TM:
                         cross_cnt+=1
                         cross = True
                         nodes_to_remove.append(primer)
@@ -86,11 +88,11 @@ def run_greedy(sequences_nt, mutreg_regions,protein_names, args):
                 G.remove_nodes_from(nodes_to_remove)
             else:
               # add selected primers to forbidden primer list
-              selected_primers.extend([seq_nt[start+mutreg_start:end+mutreg_start] for start,end,fr in shortest_path])
+              selected_primers.extend(primer_seqs.values())
+
               path_ls[protein]=shortest_path # save shortest path
-              # Calculate the cost for the found path
-              primer_set = primer_df.loc[[p for p in shortest_path]].copy().reset_index()
-              primer_cost = primer_set['cost'].sum()
+              # Calculate the cost for the found path and add to total cost
+              primer_cost = primer_df.loc[shortest_path, 'cost'].sum()
               total_cost += primer_cost
 
 

@@ -4,19 +4,18 @@ import tracemalloc
 import pandas as pd
 
 
-def run_single(sequence_nt,mutreg_nt,protein_name,args):
+def run_pd_single(sequence_nt,mutreg_nt,protein_name,args):
 
     global_start = time.time()
 
     run_data = []
 
-    primer_f, primer_df = create_primer_df(sequence_nt, args)
-
+    primer_df = create_primer_df(sequence_nt, args)
 
     # Creating the Graph
     start_time = time.time()
     tracemalloc.start()
-    graph = create_graph(primer_df, primer_f, len(mutreg_nt), args)
+    graph = create_graph(primer_df, len(mutreg_nt), args)
     graph_time = int(time.time() - start_time)
     graph_memory = tracemalloc.get_traced_memory()[1] / 10 ** 6  # MB
     tracemalloc.stop()
