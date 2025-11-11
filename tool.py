@@ -1,9 +1,10 @@
 from General.args import *
 from General.utils import *
-from PD_mul_var.run_relaxed import *
-from Non_relaxed.run_non_relaxed import *
-from PD_mul_nh.run_mul_nh import *
-from PD_single.run_pd_single import *
+from PD_var_ILP.run_var_ilp import *
+from PD_mul_ILP.run_mul_ilp import *
+from PD_mul_greedy.run_mul_greedy import *
+from PrimerDesigner.PD_single_LPath.run_pd_single_LPath import *
+
 
 
 def main():
@@ -16,16 +17,17 @@ def main():
     
     if args.version =="Non_relaxed":
         print("Running Non-relaxed version")
-        run_non_relaxed(mutreg_regions,full_sequences,protein_names,args)
+        run_mul_ilp(mutreg_regions,full_sequences,protein_names,args)
     elif args.version == "PD-mul-nh":
         print("Running PD-mul-nh version")
-        run_pd_mul_nh(full_sequences, mutreg_regions, protein_names,args)
+        run_mul_greedy(full_sequences, mutreg_regions, protein_names,args)
     elif args.version=="PD-single":
         print("Running PD-single version")
-        run_pd_single(full_sequences[0], mutreg_regions[0], protein_names[0],args)  # only runs on first sequence
+        
     else: # PD-mul-var is default
-        print("Running PD-mul-var version")
-        run_pd_mul_var(full_sequences[0],mutreg_regions[0],protein_names[0],args) # only runs on first sequence
+        print("Running PD-single-LPath version")
+        run_shortest_path(full_sequences[0], mutreg_regions[0], protein_names[0],args)  # only runs on first sequence
+        
 
 
 if __name__ == '__main__':
