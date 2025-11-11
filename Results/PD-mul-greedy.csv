@@ -1,0 +1,2 @@
+num_proteins,greedy_total_efficiency,greedy_time_sec,cross_hybridizations_cnt,proteins_with_reiterations_cnt,total_reiterations,unresolved_proteins_cnt,unresolved_proteins,max_tm_threshold_C
+100,472.8134462479995,3968.165,141,15,135,0,,45
