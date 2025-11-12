@@ -27,21 +27,18 @@ You can easily recreate the exact environment used in this project using the pro
 
 **PrimerDesigner** has 4 different version options:
 
-- **PD-single**
-  - Finds the optimal primer set for a single protein by computing the shortest path in the primer graph.
-  - Runs only on the first protein-coding sequence in the sequence file.
+- **PD-single-LPath**
+  - Finds the most efficient primer set for a single protein by computing the longest path in the primer graph.
 
-- **PD-mul-var**
-  - Finds the optimal primer set for a number of variants of the same protein-coding sequence.
-  - Runs only on the first protein-coding sequence in the sequence file.
+- **PD-var-ILP**
+  - Finds the efficient primer set  for a number of variants of the same protein-coding sequence by preventing selections of primers from overlapping subsequences.
 
-- **PD-mul-nh**
-  - Finds the optimal primer set for multiple non-homologous proteins by computing the shortest path in each protein primer graph.
-  - If there are primers in the shortest path that cross-hybridize with previously selected primers, it removes these primers from the graph and computes the shortest path again.
+- **PD-mul-Greedy**
+  - Finds the optimal primer set for multiple non-homologous proteins by computing applying an iterative greedy apporoach using the longest path algorithm.
 
-- **Non relaxed**
+- **PD-mul-ILP**
   - Finds the optimal primer set for multiple non-homologous proteins.
-  - Identifies all primers pairs that may cross-hybridize and adds them as forbidden pair ILP constraints.
+  - Identifies all cross-hybridize primers pairs using a brute-force algorithm and adds them as forbidden-pair ILP constraints.
 
 
 ## Setting Up the Tool
@@ -71,26 +68,58 @@ To execute PrimerDesginer, use the following command:
 python ./tool.py --file_path <file-path> --version <version> --output <output-file>
 ```
 - **file_path**: The file path of the protein coding-sequences
-- **version**: Specifies which version of the algorithm to run. The options are: PD-single, PD-mul-var, PD-mul-nh and non-ralxed (default:  PD-mul-var)
-- **output**: The file path that the program output will be saved to.
+- **version**: Specifies which version of the algorithm to run. The options are: PD-single-LPath, PD-mul-ILP, PD-mul-Greedy and PD-var-ILP (default:  PD-mul-var)
+- **output**: The path of the folder that the run output file will be saved to.
   
 The other arguments are optional and include the algorithm parameters:
 
-- **primer_lmin, primer_lmax**: Minimum and maximum primer lengths (default: 18,30).
-- **oligo_lmin, oligo_lmax**: Minimum and maximum oligonucleotides lengths (default: 195,205)
-- **overlap_lmin, overlap_lmax**: Minimum and maximum overlap length between oligonucleotides  (default: 45,50)
-- **allowed_overlap**: Allowed overlap between primer_pairs (default: 6)
-- **num_proteins**: Number of variants of the same sequence - used for PD-mul-var version only (default: 3)
-- **apply_threshold**: Boolean flag for applying primer quality threshold (default: False)
-- **min_gc, max_gc**: Minimum and maximum threshold on gc content (default: 40,60)
-- **min_tm, max_tm**: Minimum and maximum threshold on melting temperature tm (default: 58,65)
-- **max_difference**: Maximum difference threshold between the forward and reverse primer in each pair (default: 3)
-- **merge_bins**: Boolean flag for merging bins corresponding to identical non-overlapping sequences - used for the PD-mul-var version (default: False)
+### Parameters
 
+- **primer_lmin**, **primer_lmax**  
+  Minimum and maximum primer lengths.  
+  *Default:* 18, 30  
+
+- **oligo_lmin**, **oligo_lmax**  
+  Minimum and maximum oligonucleotide lengths.  
+  *Default:* 195, 205  
+
+- **overlap_lmin**, **overlap_lmax**  
+  Minimum and maximum overlap length between oligonucleotides.  
+  *Default:* 45, 50  
+
+- **allowed_overlap**  
+  Allowed overlap between primer pairs.  
+  *Default:* 6  
+
+- **num_proteins**  
+  Number of variants of the same sequence.  
+  *Used for:* `PD-mul-var` version only.  
+  *Default:* 3  
+
+- **apply_threshold**  
+  Boolean flag for applying primer quality threshold.  
+  *Default:* False  
+
+- **min_gc**, **max_gc**  
+  Minimum and maximum GC content threshold (in %).  
+  *Default:* 40, 60  
+
+- **min_tm**, **max_tm**  
+  Minimum and maximum melting temperature (Tm) thresholds (in °C).  
+  *Default:* 58, 65  
+
+- **max_difference**  
+  Maximum allowed Tm difference between forward and reverse primers in a pair.  
+  *Default:* 3  
+
+- **merge_bins**  
+  Boolean flag for merging bins corresponding to identical non-overlapping sequences.  
+  *Used for:* `PD-mul-var` version.  
+  *Default:* False
 
 Example command:
 ```bash
-python ./tool.py --file_path example_proteins.txt --version Non_relaxed --output run_output --primer_lmin 20 --primer_lmax 26 --oligo_lmin 180 --oligo_lmax 200
+python ./tool.py --file_path example_proteins.txt --version PD-mul-ILP --output run_output --primer_lmin 20 --primer_lmax 26 --oligo_lmin 180 --oligo_lmax 200
 ```
 
 

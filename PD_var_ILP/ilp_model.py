@@ -30,7 +30,7 @@ def ilp_model(graph, sequence_nt, mutreg_nt, args):
     graph_edges = graph.edges(data=True)
     graph_nodes = [node for node in graph.nodes if node != 's' and node != 'd']  # removing s & d nodes
 
-    mutreg_start = len(upstream_nt)
+    mutreg_start = len(UPSTREAM_NT)
     l_range = (args.allowed_overlap + 1, args.primer_lmax + 1)
 
     def create_bins(l_range):

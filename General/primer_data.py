@@ -113,8 +113,8 @@ def create_primer_df(sequence_nt, args):
     primer_f['fr'] = 'f'
 
     # Shift positions so 0 aligns to start of mutreg
-    primer_f['start'] = primer_f.start - len(upstream_nt)
-    primer_f['stop']  = primer_f.stop  - len(upstream_nt)
+    primer_f['start'] = primer_f.start - len(UPSTREAM_NT)
+    primer_f['stop']  = primer_f.stop  - len(UPSTREAM_NT)
 
     # Reverse primers at same loci (reverse-complement sequences)
     primer_r = primer_f[['seq','start','stop','fr','len']].copy()

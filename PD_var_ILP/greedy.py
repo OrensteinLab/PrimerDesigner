@@ -3,15 +3,15 @@ import itertools as it
 import networkx as nx
 from General.utils import *
 
-def run_greedy(G, primer_df,args):
+def run_greedy(graph, primer_df,args):
 
   print("Running greedy algorithm")
 
   path_ls = [[]]
-  G_sub = G.copy()
+  graph_sub = graph.copy()
   for i in range(args.num_proteins):
     nodes_to_remove = []
-    for p,n in it.product(path_ls[-1],G_sub.nodes()):
+    for p,n in it.product(path_ls[-1],graph_sub.nodes()):
       if n=='s' or n=='d':
         continue
       p_start, p_end, _ = p
@@ -23,9 +23,9 @@ def run_greedy(G, primer_df,args):
       )
       if pn_intersect:
         nodes_to_remove.append(n)
-    G_sub.remove_nodes_from(set(nodes_to_remove))
+    graph_sub.remove_nodes_from(set(nodes_to_remove))
     try:
-      path_ls.append([primer for primer in longest_path_dag(G_sub, 's', 'd')[1:-1]])
+      path_ls.append([primer for primer in longest_path_dag(graph_sub, 's', 'd')[1:-1]])
     except:
       print(f'WARNING: No feasible primer sequence for lib_{i}; reduce number of libraries or relax constraints.')
 

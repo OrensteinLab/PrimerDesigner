@@ -35,7 +35,7 @@ def run_shortest_path(sequence_nt, mutreg_nt, protein_name, args):
         # cost = sum of node weights as you stored them on edges entering those nodes
         # but you already stored the per-primer cost in primer_df, so:
         primer_set = primer_df.loc[primer_path_nodes].copy().reset_index()
-        primer_cost = float(primer_set['cost'].sum())
+        primer_cost = float(primer_set['efficiency'].sum())
         status = "OK"
     except nx.NetworkXNoPath:
         primer_path_nodes = []
@@ -57,21 +57,22 @@ def run_shortest_path(sequence_nt, mutreg_nt, protein_name, args):
     }
     df = pd.DataFrame([row])
 
-    out_base = Path(args.output)
-    out_base.parent.mkdir(parents=True, exist_ok=True)
-    csv_path = out_base.with_suffix(".csv")
+    # Ensure output directory exists
+    out_dir = Path(args.output)
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    # ---- CSV summary ----
+    csv_path = out_dir / "PD_single_results.csv"
     df.to_csv(csv_path, index=False)
 
-    # ---- JSON (paths only) ----
-    json_path = out_base.with_suffix(".json")
-    paths_out = {
-        "protein_name": protein_name,
-        "shortest_path_nodes": primer_path_nodes  # tuples like (start, stop, 'f'/'r')
-    }
-    with open(out_base.with_suffix('').as_posix() + "_paths.json", "w") as f:
-        json.dump(paths_out, f, indent=2)
+    # ---- Paths JSON ----
+    paths_json_path = out_dir / "primer_paths.json"
+    with open(paths_json_path, "w") as f:
+        json.dump({
+            "protein_name": protein_name,
+            "shortest_path_nodes": primer_path_nodes
+        }, f, indent=2)
 
-    print(f"Saved summary to: {csv_path}")
-    print(f"Saved path to:    {json_path}")
-
+    print(f"✅ Saved CSV summary to: {csv_path}")
+    print(f"✅ Saved path details to: {paths_json_path}")
 

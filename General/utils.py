@@ -10,8 +10,9 @@ MAX_TM = 45.0
 PCR = p3.thermoanalysis.ThermoAnalysis()
 
 # Define global upstream and downstream regions
-upstream_nt = 'GCTAGTGGTGCTAGCCCCGCGAAATTAATACGACTCACTATAGGGTCTAGAAATAATTTTGTTTAACTTTAAGAAGGAGATATACAT'
-downstream_nt = 'GGAGGGTCTGGGGGAGGAGGCAGTGGCATGGTGAGCAAGGGCGAGGAGCTGTTCACCGGGGTGGTGCCCATCCTGGTCGAGCTGGACGGCGACGTAAACGGCCACAAGTTCAGCGTGTCCGGCGAGGGCGAGGGCGATGCCACCTACGGCAAGCTGACCCTGAAGTTCATCTGCACCACCGGCAAGCTGCCCG'
+# UPSTREAM_NT = 'GCTAGTGGTGCTAGCCCC'
+UPSTREAM_NT = 'GCTAGTGGTGCTAGCCCCGCGAAATTAATACGACTCACTATAGGGTCTAGAAATAATTTTGTTTAACTTTAAGAAGGAGATATACAT'
+DOWNSTREAM_NT = 'GGAGGGTCTGGGGGAGGAGGCAGTGGCATGGTGAGCAAGGGCGAGGAGCTGTTCACCGGGGTGGTGCCCATCCTGGTCGAGCTGGACGGCGACGTAAACGGCCACAAGTTCAGCGTGTCCGGCGAGGGCGAGGGCGATGCCACCTACGGCAAGCTGACCCTGAAGTTCATCTGCACCACCGGCAAGCTGCCCG'
 
 def calc_tm(seq1, seq2):
     return PCR.calc_heterodimer(seq1, seq2,).tm
@@ -35,6 +36,7 @@ def read_sequences(file_path):
     mutreg_regions = []
     protein_names=[]
 
+    # i = 0 
     # read  protein coding-sequences from the file path
     with open(file_path) as file:
         for line in file.readlines():
@@ -47,7 +49,13 @@ def read_sequences(file_path):
     # add constant upstream and downstream regions to each sequence
     for mutreg_nt in mutreg_regions:
 
-        sequence = upstream_nt + mutreg_nt + downstream_nt
+        # if i % 2 == 0:
+        #     sequence = revcomp(UPSTREAM_NT) + mutreg_nt + DOWNSTREAM_NT
+        # else: 
+        #     sequence = UPSTREAM_NT + mutreg_nt + DOWNSTREAM_NT
+        # i+=1 
+
+        sequence = UPSTREAM_NT + mutreg_nt + DOWNSTREAM_NT
         full_sequences.append(sequence)
 
     return mutreg_regions,full_sequences,protein_names

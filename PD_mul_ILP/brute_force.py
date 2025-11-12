@@ -165,7 +165,7 @@ def _two_stage_driver(
     with ctx.Pool(
         processes=procs,
         initializer=_init_worker_stage2,
-        initargs=(seq1, seq2, lmin, lmax, max_tm, len(upstream_nt)),
+        initargs=(seq1, seq2, lmin, lmax, max_tm, len(UPSTREAM_NT)),
     ) as pool:
         parts_iter = pool.imap_unordered(_stage2_expand, candidates, chunksize=1)
         out: set[tuple[tuple[int,int], tuple[int,int]]] = set()
