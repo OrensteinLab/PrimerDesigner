@@ -1,0 +1,14 @@
+name: primer_env
+channels:
+  - defaults
+dependencies:
+  - python=3.9
+  - numpy=2.0
+  - pandas=2.3
+  - networkx=3.2
+  - matplotlib       
+  - pip
+  - pip:
+      - biopython==1.85
+      - primer3-py==2.2.0
+      - gurobipy==12.0.3
