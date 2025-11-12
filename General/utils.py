@@ -10,8 +10,8 @@ MAX_TM = 45.0
 PCR = p3.thermoanalysis.ThermoAnalysis()
 
 # Define global upstream and downstream regions
-upstream_nt = 'GCTAGTGGTGCTAGCCCCGCGAAATTAATACGACTCACTATAGGGTCTAGAAATAATTTTGTTTAACTTTAAGAAGGAGATATACAT'
-downstream_nt = 'GGAGGGTCTGGGGGAGGAGGCAGTGGCATGGTGAGCAAGGGCGAGGAGCTGTTCACCGGGGTGGTGCCCATCCTGGTCGAGCTGGACGGCGACGTAAACGGCCACAAGTTCAGCGTGTCCGGCGAGGGCGAGGGCGATGCCACCTACGGCAAGCTGACCCTGAAGTTCATCTGCACCACCGGCAAGCTGCCCG'
+UPSTREAM_NT = 'GCTAGTGGTGCTAGCCCCGCGAAATTAATACGACTCACTATAGGGTCTAGAAATAATTTTGTTTAACTTTAAGAAGGAGATATACAT'
+DOWNSTREAM_NT = 'GGAGGGTCTGGGGGAGGAGGCAGTGGCATGGTGAGCAAGGGCGAGGAGCTGTTCACCGGGGTGGTGCCCATCCTGGTCGAGCTGGACGGCGACGTAAACGGCCACAAGTTCAGCGTGTCCGGCGAGGGCGAGGGCGATGCCACCTACGGCAAGCTGACCCTGAAGTTCATCTGCACCACCGGCAAGCTGCCCG'
 
 def calc_tm(seq1, seq2):
     return PCR.calc_heterodimer(seq1, seq2,).tm
@@ -35,7 +35,6 @@ def read_sequences(file_path):
     mutreg_regions = []
     protein_names=[]
 
-    # i = 0 
     # read  protein coding-sequences from the file path
     with open(file_path) as file:
         for line in file.readlines():
@@ -48,7 +47,7 @@ def read_sequences(file_path):
     # add constant upstream and downstream regions to each sequence
     for mutreg_nt in mutreg_regions:
 
-        sequence = upstream_nt + mutreg_nt + downstream_nt
+        sequence = UPSTREAM_NT + mutreg_nt + DOWNSTREAM_NT
         full_sequences.append(sequence)
 
     return mutreg_regions,full_sequences,protein_names
@@ -70,7 +69,7 @@ class NoPathError(Exception):
     """Raised when no path exists between source and target in the DAG."""
     pass
 
-def longest_path_dag(G, source, target):  
+def longest_path_dag(G, source, target): 
     """
     Finds the maximum-weight path between source and target in a DAG.
     Raises NoPathError if no path exists.
