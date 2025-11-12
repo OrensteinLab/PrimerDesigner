@@ -35,7 +35,6 @@ def read_sequences(file_path):
     mutreg_regions = []
     protein_names=[]
 
-    # i = 0 
     # read  protein coding-sequences from the file path
     with open(file_path) as file:
         for line in file.readlines():
