@@ -8,16 +8,15 @@ This repository contains the source code for PrimerDesigner, a tool designed to 
 ![alt text](https://github.com/OrensteinLab/PrimerDesigner/blob/main/primer_design_illustration.png)
 
 
-## Requirements
+## Creating the Conda Environment
 
-The tool has been tested with the following configuration on a Linux machine:
-- Python 3.9.18
-- GurobiPy 11.0.2
-- NetworkX 3.2.1
-- NumPy 1.24.3
-- Pandas 2.1.3
-- Biopython 1.75
-- Primer3 2.0.1
+This project uses **Conda** for environment and dependency management.  
+You can easily recreate the exact environment used in this project using the provided `environment.yml` file.
+
+- **1. Create the environment**
+
+  ```bash
+  conda env create -f environment.yml
 
 ## The Different Versions
 
@@ -88,6 +87,7 @@ Example command:
 ```bash
 python ./tool.py --file_path example_proteins.txt --version Non_relaxed --output run_output --primer_lmin 20 --primer_lmax 26 --oligo_lmin 180 --oligo_lmax 200
 ```
+
 
 
 
