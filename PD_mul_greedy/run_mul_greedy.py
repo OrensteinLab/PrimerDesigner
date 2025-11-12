@@ -10,7 +10,7 @@ from General.primer_graphs import create_primer_df, create_graph
 from General.primer_data import *
 from General.utils import *
 
-MUTREG_START = len(upstream_nt)
+MUTREG_START = len(UPSTREAM_NT)
 
 def run_mul_greedy(
     sequences_nt: list[str],

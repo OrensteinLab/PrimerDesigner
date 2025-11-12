@@ -56,10 +56,15 @@ def run_var_ilp(sequence_nt, mutreg_nt, protein_name, args):
     }
 
 
-    out_base = Path(args.output)
-    pd.DataFrame([results]).to_csv(f"{args.output}.csv", index=False)
+    # Ensure output directory exists
+    out_dir = Path(args.output)
+    out_dir.mkdir(parents=True, exist_ok=True)
 
-    # ---- Step 5: JSON paths only ----
+    # ---- Step 4: Save CSV ----
+    csv_path = out_dir / "mul_variants_results.csv"
+    pd.DataFrame([results]).to_csv(csv_path, index=False)
+
+    # ---- Step 5: Save JSON paths ----
     paths_out = {
         "protein_name": protein_name,
         "num_variants": getattr(args, "num_proteins", None),
@@ -67,9 +72,11 @@ def run_var_ilp(sequence_nt, mutreg_nt, protein_name, args):
         "greedy_path": greedy_solution,
     }
 
-    with open(out_base.with_suffix('').as_posix() + "_paths.json", "w") as f:
+    json_path = out_dir / "primer_paths.json"
+    with open(json_path, "w") as f:
         json.dump(paths_out, f, indent=2)
 
-    print(f"✅ Saved summary to: {out_base.with_suffix('.csv')}")
-    print(f"✅ Saved paths to: {out_base.with_suffix('.json')}")
+    # ---- Step 6: Print confirmation ----
+    print(f"✅ Saved summary to: {csv_path}")
+    print(f"✅ Saved paths to: {json_path}")
 
