@@ -69,7 +69,7 @@ class NoPathError(Exception):
     """Raised when no path exists between source and target in the DAG."""
     pass
 
-def longest_path_dag(G, source, target):
+def longest_path_dag(G, source, target): 
     """
     Finds the maximum-weight path between source and target in a DAG.
     Raises NoPathError if no path exists.
