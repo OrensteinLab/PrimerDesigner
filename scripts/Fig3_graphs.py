@@ -4,7 +4,7 @@ import numpy as np
 import math
 import matplotlib.lines as mlines
 
-length_df = pd.read_csv('../New_results/PD-var-ILP-increasing-lengths.csv')
+length_df = pd.read_csv('../Results/PD-var-ILP-increasing-lengths.csv')
 
 
 num_primers_ilp = length_df['ilp_path_length']/2
@@ -97,7 +97,7 @@ for x, y, n in zip(lengths, greedy_time, num_primers_greedy):
     ax2.text(x + 25, y + 6, str(int(y)), ha='center', va='bottom', color=greedy_color, fontsize=15, zorder=10)
 
 
-variant_df = pd.read_csv('../New_results/PD-var-ILP-increasing_variants.csv')
+variant_df = pd.read_csv('../Results/PD-var-ILP-increasing_variants.csv')
 
 # Extract the necessary data for plotting
 num_proteins = variant_df['num_variants']
@@ -121,29 +121,28 @@ ax3.plot(
 )
 
 # Draw dashed horizontal infeasible line
-x_start = num_proteins[last_feasible_idx]          # 4
-x_end   = num_proteins.iloc[-1]                    # 6
-y_level = greedy_objective[last_feasible_idx]      # y-value at x=4
+# Compute data x-range once the x-limits are set
+x0, x1 = ax3.get_xlim()
+x_start = num_proteins[last_feasible_idx]          # e.g., 4
+x_end   = num_proteins.iloc[-1]                    # e.g., 6
 
+# Bold line along the bottom (y=0 in axes coords), with x in data coords
 ax3.hlines(
-    y=y_level,
-    xmin=x_start,
-    xmax=x_end,
-    linestyle="dashed",
-    color='black',
-    linewidth=1.8
+    y=0, xmin=x_start, xmax=x_end,
+    colors="black", linewidth=3,
+    transform=ax3.get_xaxis_transform(),  # x in data, y in axes
+    clip_on=False
 )
 
-# Add "infeasible" text under dashed line
+# Label just above the bottom line (y a small axes fraction)
 ax3.text(
-    (x_start + x_end) / 2,
-    y_level - 0.006,            # slightly below dashed line
-    "Infeasible",
-    ha='center',
-    va='top',
-    fontsize=15,
-    color='black'
+    (x_start + x_end)/2, 0.02,  # 0.02 = 2% above bottom
+    "Infeasible by greedy",
+    ha="center", va="bottom",
+    fontsize=18,
+    transform=ax3.get_xaxis_transform()
 )
+
 ax3.set_xlabel('Number of variants of the same protein', fontsize=20)
 ax3.set_ylabel('Average primer efficiency', fontsize=20)
 ax3.grid(False)
@@ -176,8 +175,26 @@ for x, y, n in zip(num_proteins, ilp_time, num_primers_ilp):
 for x, y, n in zip(num_proteins[:3], greedy_time[:3], num_primers_greedy[:3]):
     ax4.text(x, y + 25, str(int(y)), ha='center', va='bottom', color=greedy_color, fontsize=15)
 
+# Bold infeasible line along the x-axis for runtime plot
+x_start = num_proteins[last_feasible_idx]
+x_end   = num_proteins.iloc[-1]
 
-protein_df = pd.read_csv("../New_results/PD-var-ILP-different-proteins.csv")
+ax4.hlines(
+    y=0, xmin=x_start, xmax=x_end,
+    colors="black", linewidth=3,
+    transform=ax4.get_xaxis_transform(),
+    clip_on=False
+)
+
+ax4.text(
+    (x_start + x_end)/2, 0.02,
+    "Infeasible by greedy",
+    ha="center", va="bottom",
+    fontsize=18,
+    transform=ax4.get_xaxis_transform()
+)
+
+protein_df = pd.read_csv("../Results/PD-var-ILP-different-proteins.csv")
 
 proteins = protein_df['protein_name']
 
@@ -273,4 +290,4 @@ ax6.set_ylim(0.1, 2500)
 
 plt.subplots_adjust(left=0.05, right=0.96, wspace=0.15, bottom=0.08, top=0.98)
 
-plt.savefig("../results/figure3.png", dpi=300)
+plt.savefig("../Results/figure3.png", dpi=300)

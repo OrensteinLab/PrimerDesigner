@@ -31,10 +31,10 @@ You can easily recreate the exact environment used in this project using the pro
   - Finds the most efficient primer set for a single protein by computing the longest path in the primer graph.
 
 - **PD-var-ILP**
-  - Finds the efficient primer set  for a number of variants of the same protein-coding sequence by preventing selections of primers from overlapping subsequences.
+  - Finds the most efficient primer set  for a number of variants of the same protein-coding sequence by imposing ILP constraints to prevent the selections of primers from overlapping subsequences.
 
 - **PD-mul-Greedy**
-  - Finds the optimal primer set for multiple non-homologous proteins by computing applying an iterative greedy apporoach using the longest path algorithm.
+  - Finds the optimal primer set for multiple non-homologous proteins by applying an iterative greedy apporoach using the longest path algorithm in the primer graph.
 
 - **PD-mul-ILP**
   - Finds the optimal primer set for multiple non-homologous proteins.
@@ -68,8 +68,8 @@ To execute PrimerDesginer, use the following command:
 python ./tool.py --file_path <file-path> --version <version> --output <output-file>
 ```
 - **file_path**: The file path of the protein coding-sequences
-- **version**: Specifies which version of the algorithm to run. The options are: PD-single-LPath, PD-mul-ILP, PD-mul-Greedy and PD-var-ILP (default:  PD-mul-var)
-- **output**: The path of the folder that the run output file will be saved to.
+- **version**: Specifies which version of the algorithm to run. The options are: PD-single-LPath, PD-mul-ILP, PD-mul-Greedy and PD-var-ILP (default:  PD-single-LPath)
+- **output**: The path of the folder that the run's output file will be saved to.
   
 The other arguments are optional and include the algorithm parameters:
 
@@ -93,7 +93,7 @@ The other arguments are optional and include the algorithm parameters:
 
 - **num_proteins**  
   Number of variants of the same sequence.  
-  *Used for:* `PD-mul-var` version only.  
+  *Used for:* `PD-var-ILP` version only.  
   *Default:* 3  
 
 - **apply_threshold**  
@@ -114,12 +114,12 @@ The other arguments are optional and include the algorithm parameters:
 
 - **merge_bins**  
   Boolean flag for merging bins corresponding to identical non-overlapping sequences.  
-  *Used for:* `PD-mul-var` version.  
+  *Used for:* `PD-var-ILP` version.  
   *Default:* False
 
 Example command:
 ```bash
-python ./tool.py --file_path example_proteins.txt --version PD-mul-ILP --output run_output --primer_lmin 20 --primer_lmax 26 --oligo_lmin 180 --oligo_lmax 200
+python ./tool.py --version PD-mul-ILP --file_path example_proteins.txt  --output run_output --primer_lmin 20 --primer_lmax 26 --oligo_lmin 180 --oligo_lmax 200
 ```
 
 

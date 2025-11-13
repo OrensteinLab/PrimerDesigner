@@ -4,7 +4,7 @@ from scipy import stats
 import ast
 import matplotlib.lines as mlines
 
-run_df = pd.read_csv("../New_results/PD-mul-ILP.csv")
+run_df = pd.read_csv("../Results/PD-mul-ILP.csv")
 
 num_proteins= run_df["num_proteins"]
 
@@ -107,4 +107,4 @@ fig.text(0.52, 0.93, "B", fontsize=30, va='center', ha='center', fontweight='bol
 
 plt.subplots_adjust(bottom=0.23, wspace=0.16, top=0.9, left=0.05, right=0.95)
 
-plt.savefig("../results/figure2.png",dpi=300)
+plt.savefig("../Results/figure2.png",dpi=300)
