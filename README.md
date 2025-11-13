@@ -65,10 +65,10 @@ CXAR  ATGGCGCTCCTGCTGTGCTTCGTGCTCCTGTGCGGAGTAGTGGATTTCGCCAGAAGTTTGAGTATCACTACTCC
 To execute PrimerDesginer, use the following command:
 
 ```bash
-python ./tool.py --file_path <file-path> --version <version> --output <output-file>
+python ./tool.py --version <version> --file_path <file-path>  --output <output-file>
 ```
 - **file_path**: The file path of the protein coding-sequences
-- **version**: Specifies which version of the algorithm to run. The options are: PD-single-LPath, PD-mul-ILP, PD-mul-Greedy and PD-var-ILP (default:  PD-single-LPath)
+- **version**: Specifies which version of the algorithm to run. The options are: `PD-single-LPath`, `PD-mul-ILP`, `PD-mul-Greedy` and `PD-var-ILP` (default:  `PD-single-LPath`)
 - **output**: The path of the folder that the run's output file will be saved to.
   
 The other arguments are optional and include the algorithm parameters:
