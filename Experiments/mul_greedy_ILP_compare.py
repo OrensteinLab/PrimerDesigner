@@ -8,7 +8,7 @@ def main():
 
     sys.argv = [
         sys.argv[0],
-        "--file_path", "data/10_protein_coding_sequences_example.txt",
+        "--file_path", "data/10_protein_coding_sequences.txt",
         "--output", "Experiment_results/mul_greedy_compare",
         ]
 
