@@ -25,8 +25,8 @@ Specific parameters for PD-var-ILP include
   *Default:* False
 
 - **allowed_overlap**  
-  Allowed overlap between primer pairs.
-  *Default:* 6  
+  Maximum allowed overlap between primer pairs from overlapping regions.
+  *Default:* 6
 
 ## Output
 All results are saved to the specified output directory.  
