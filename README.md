@@ -25,21 +25,24 @@ You can easily recreate the exact environment used in this project using the pro
 
 ## The Different Versions
 
-**PrimerDesigner** has 4 different version options:
+**PrimerDesigner** offers four variants, each supporting a different primer-design setting.
+Detailed input/output specifications are provided in the linked documentation.
 
-- **PD-single-LPath.md [docs/PD-single-LPath.md](docs/PD-single-LPath.md)**
-  - Finds the most efficient primer set for a single protein by computing the longest path in the primer graph.
+- **PD-single-LPath**  
+  Longest-path algorithm for primer design on a single protein.  
+  Documentation: [docs/PD-single-LPath.md](docs/PD-single-LPath.md)
 
-- **PD-var-ILP**
-  - Finds the most efficient primer set  for a number of variants of the same protein-coding sequence by imposing ILP constraints to prevent the selections of primers from overlapping subsequences.
+- **PD-var-ILP**  
+  ILP-based design for variants of the same protein, preventing selection of primers that overlap beyond a specified threshold.  
+  Documentation: [docs/PD-var-ILP.md](docs/PD-var-ILP.md)
 
-- **PD-mul-Greedy**
-  - Finds the optimal primer set for multiple non-homologous proteins by applying an iterative greedy apporoach using the longest path algorithm in the primer graph.
+- **PD-mul-Greedy**  
+  Greedy iterative approach for multiple non-homologous proteins, using repeated longest-path computations.  
+  Documentation: [docs/PD-mul-Greedy.md](docs/PD-mul-Greedy.md)
 
-- **PD-mul-ILP**
-  - Finds the optimal primer set for multiple non-homologous proteins.
-  - Identifies all cross-hybridize primers pairs using a brute-force algorithm and adds them as forbidden-pair ILP constraints.
-
+- **PD-mul-ILP**  
+  ILP formulation for multiple non-homologous proteins, with brute-force cross-hybridization detection and forbidden-pair constraints.  
+  Documentation: [docs/PD-mul-ILP.md](docs/PD-mul-ILP.md)
 
 ## Setting Up the Tool
 
@@ -121,6 +124,7 @@ Example command:
 ```bash
 python ./tool.py --version PD-mul-ILP --file_path example_proteins.txt  --output run_output --primer_lmin 20 --primer_lmax 26 --oligo_lmin 180 --oligo_lmax 200
 ```
+
 
 
 
