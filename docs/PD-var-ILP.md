@@ -20,7 +20,11 @@ Specific parameters for PD-var-ILP include
 The number of variants for which you want to design specific primers for
 
 - **merge_bins**  
-  Boolean flag for merging bins corresponding to identical non-overlapping sequences.  
+  Boolean flag for merging bins corresponding to identical non-overlapping sequences.
+
+- **allowed_overlap**  
+Allowed overlap between primer pairs.  
+*Default:* 6  
 
 ## Output
 All results are saved to the specified output directory.  
