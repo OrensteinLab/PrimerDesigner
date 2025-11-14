@@ -27,7 +27,7 @@ You can easily recreate the exact environment used in this project using the pro
 
 **PrimerDesigner** has 4 different version options:
 
-- **PD-single-LPath [docs/PD-single-LPath.md]**
+- **[docs/PD-single-LPath.md](docs/PD-single-LPath.md)**
   - Finds the most efficient primer set for a single protein by computing the longest path in the primer graph.
 
 - **PD-var-ILP**
@@ -121,6 +121,7 @@ Example command:
 ```bash
 python ./tool.py --version PD-mul-ILP --file_path example_proteins.txt  --output run_output --primer_lmin 20 --primer_lmax 26 --oligo_lmin 180 --oligo_lmax 200
 ```
+
 
 
 
