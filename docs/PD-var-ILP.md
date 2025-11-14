@@ -22,7 +22,7 @@ The number of variants for which you want to design specific primers for
 
 - **merge_bins**  
   Boolean flag for merging bins corresponding to identical non-overlapping sequences.
-  *Default:* False
+*Default:* False
 
 - **allowed_overlap**  
 Allowed overlap between primer pairs.  
