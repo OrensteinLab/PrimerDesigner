@@ -28,7 +28,6 @@ The output includes:
 
 - total runtime  
 - memory usage statistics  
-- ILP objective value  
-- final selected primer set across all variants  
+- ILP objective value - the primer efficiency
 
 A JSON file containing the optimal primer-selection paths for each variant is also produced.
