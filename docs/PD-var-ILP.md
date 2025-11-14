@@ -14,18 +14,18 @@ SHP2_reference   ATGACATCGCGGAGATGGTTTCACCCAAAT...
 ```
 ## Parameters
 All parameters follow the global program settings described in the main README and are provided through command-line arguments.  
-Specific parameters for PD-var-ILP include
+Specific parameters for PD-var-ILP include:
 
 - **num_proteins**  
-  The number of variants for which you want to design specific primers for.
+  The number of variants for which you want to design specific primers for.  
   *Default:* 3
 
 - **merge_bins**  
-  Boolean flag for merging bins corresponding to identical non-overlapping sequences.
+  Boolean flag for merging bins corresponding to identical non-overlapping sequences.  
   *Default:* False
 
 - **allowed_overlap**  
-  Maximum allowed overlap between primer pairs from overlapping regions.
+  Maximum allowed overlap between primer pairs from overlapping regions.  
   *Default:* 6
 
 ## Output
