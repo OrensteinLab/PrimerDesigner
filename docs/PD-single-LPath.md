@@ -23,4 +23,4 @@ The output includes a summary CSV containing:
 - memory usage statistics  
 - the cost (efficiency) of the selected primer set
 
-  A JSON file containing the optimal primer-selection paths for each variant is also produced.
+A JSON file containing the optimal primer-selection paths for each variant is also produced.
