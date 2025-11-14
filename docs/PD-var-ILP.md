@@ -11,7 +11,7 @@ Create a text file with one line contains the protein name and a reference DNA c
 
 ```text
 SHP2_reference   ATGACATCGCGGAGATGGTTTCACCCAAAT...
-
+```
 ## Parameters
 All parameters follow the global program settings described in the main README and are provided through command-line arguments.  
 Specific parameters for PD-var-ILP include
