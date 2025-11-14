@@ -17,7 +17,7 @@ All parameters follow the global program settings described in the main README a
 Specific parameters for PD-var-ILP include
 
 - **num_proteins**  
-  The number of variants for which you want to design specific primers for
+  The number of variants for which you want to design specific primers for.
   *Default:* 3
 
 - **merge_bins**  
@@ -25,7 +25,7 @@ Specific parameters for PD-var-ILP include
   *Default:* False
 
 - **allowed_overlap**  
-  Allowed overlap between primer pairs.  
+  Allowed overlap between primer pairs.
   *Default:* 6  
 
 ## Output
