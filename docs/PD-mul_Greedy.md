@@ -22,9 +22,8 @@ All parameters match the global program configuration described in the main READ
 
 Results are written to the specified output directory.
 The output includes a summary CSV containing:
-	•	total runtime
-	•	memory usage statistics
-	•	efficiency of the primer sets
-	•	selected primer set for each protein
+	- total runtime
+	- memory usage statistics
+	- efficiency of the primer sets
 
 A JSON file containing the optimal primer-selection paths for each protein is also produced.
