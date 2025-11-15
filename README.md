@@ -56,8 +56,10 @@ First, create a file named `gurobi.json` containing the details for the Gurobi l
 }
 ```
 
-Create a text file containing the protein names and their DNA coding-sequences. Each line should contain a protein's name and its DNA coding-sequence, separated by a tab. For example: 
+Create a text file containing the protein names and their DNA coding sequences.  
+Input formats that are specific to each PrimerDesigner variant are described in their corresponding documentation files.
 
+Example:
 ```text
 SHP2  ATGACATCGCGGAGATGGTTTCACCCAAATATCACTGGTGTGGAGGCAGAAAACCTACTGTTGACAAGAGGAGT....
 CXAR  ATGGCGCTCCTGCTGTGCTTCGTGCTCCTGTGCGGAGTAGTGGATTTCGCCAGAAGTTTGAGTATCACTACTCC....
@@ -124,6 +126,7 @@ Example command:
 ```bash
 python ./tool.py --version PD-mul-ILP --file_path example_proteins.txt  --output run_output --primer_lmin 20 --primer_lmax 26 --oligo_lmin 180 --oligo_lmax 200
 ```
+
 
 
 
