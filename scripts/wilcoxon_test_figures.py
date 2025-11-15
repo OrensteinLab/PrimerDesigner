@@ -4,7 +4,7 @@ from scipy.stats import mannwhitneyu, wilcoxon
 # ======================================================
 # Figure Supp. – Tm distribution comparison (Random vs Real)
 # ======================================================
-tm_df = pd.read_csv('../results/tm_pairs.csv')
+tm_df = pd.read_csv('../Results/tm_pairs.csv')
 
 tm_random = tm_df['random_tm']
 tm_real = tm_df['real_tm']
@@ -21,7 +21,7 @@ print(f"Figure Supp. – P-value: {p_value_tm:.4e}")
 # ======================================================
 # Figure 2B – Runtime comparison (ILP vs Greedy)
 # ======================================================
-runtime_df = pd.read_csv("../results/PD-mul-ILP.csv")
+runtime_df = pd.read_csv("../Results/PD-mul-ILP.csv")
 
 runtime_ilp = runtime_df['ilp_optimize_time_sec']+runtime_df['ilp_setup_time_sec']
 runtime_greedy = runtime_df['greedy_time_sec']
@@ -37,7 +37,7 @@ print(f"Figure 2B – Wilcoxon Signed-Rank Test (Runtime): Statistic={stat_runti
 # ======================================================
 # Figure 3 – Efficiency and Runtime by Sequence Length
 # ======================================================
-length_df = pd.read_csv('../results/PD-var-ILP-increasing-lengths.csv')
+length_df = pd.read_csv('../Results/PD-var-ILP-increasing-lengths.csv')
 
 ilp_primers = length_df['ilp_path_length']
 greedy_primers = length_df['greedy_path_length']
@@ -67,7 +67,7 @@ print(f"Figure 3B – Runtime Comparison: Statistic={stat_runtime_length}, P-val
 # ======================================================
 # Figure 3E & 3F – Protein-specific Comparisons
 # ======================================================
-protein_df = pd.read_csv('../results/PD-var-ILP-different-proteins.csv')
+protein_df = pd.read_csv('../Results/PD-var-ILP-different-proteins.csv')
 
 ilp_primers = protein_df['ilp_path_length']
 greedy_primers = protein_df['greedy_path_length']
