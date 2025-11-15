@@ -1,0 +1,29 @@
+# PD-mul-ILP  
+**ILP-based PrimerDesigner version for multiple non-homologous proteins**
+
+## Overview
+`PD-mul-ILP` designs an efficient primer set for **multiple non-homologous protein-coding sequences**.  
+This version first identifies all primer pairs that may cross-hybridize between different proteins using a brute-force search, and then encodes these as forbidden-pair constraints in an ILP formulation. The ILP ensures that no two selected primers form a high-risk cross-hybridizing pair, while maximizing the overall primer efficiency.
+
+## Input Format (Required)
+Create a text file where **each line** contains a protein name and its DNA coding sequence, separated by a tab character:
+
+```text
+SHP2   ATGACATCGCGGAGATGGTTTCACCCAAATATCACTGGTGTGGAGGCAGAAAACCTACTGTTGACAAGAGGAGT...
+CXAR   ATGGCGCTCCTGCTGTGCTTCGTGCTCCTGTGCGGAGTAGTGGATTTCGCCAGAAGTTTGAGTATCACTACTCC...
+...
+
+## Parameters
+
+All parameters match the global program configuration described in the main README and are supplied as command-line arguments.
+
+## Output
+
+Results are written to the specified output directory.
+The output includes a summary CSV containing:
+- Runtime for different program stages
+- Number of inter and itra- protein cross-hybridization risks
+- Memory usage statistics
+- Efficiency of the selected primer sets
+
+A JSON file containing the optimal primer-selection paths for each protein is also produced.
