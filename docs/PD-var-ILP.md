@@ -7,7 +7,7 @@
 This version uses an ILP formulation with forbidden-pair constraints to prevent selecting primers that overlap beyond a user-defined threshold across variants.
 
 ## Input Format (Required)
-Create a text file containing **one line** with the protein name and the **reference DNA coding sequence** representing all variants (typically obtained after aligning the variants):
+Create a text file containing **one line** with the protein name and the **consensus DNA coding sequence** representing all variants (typically obtained after aligning the variants):
 
 ```text
 SHP2_reference   ATGACATCGCGGAGATGGTTTCACCCAAAT...
