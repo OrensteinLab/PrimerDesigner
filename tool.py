@@ -26,7 +26,7 @@ def main():
         run_var_ilp(full_sequences[0], mutreg_regions[0], protein_names[0],args)
     else: 
         print("Running PD-single-LPath version")
-        run_shortest_path(full_sequences[0], mutreg_regions[0], protein_names[0],args)  # only runs on first sequence
+        run_longest_path(full_sequences[0], mutreg_regions[0], protein_names[0],args)  # only runs on first sequence
         
 
 
