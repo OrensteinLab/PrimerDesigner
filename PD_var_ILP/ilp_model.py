@@ -169,7 +169,7 @@ def ilp_model(graph, sequence_nt, mutreg_nt, args):
             print()
     else:
         print(f"Model status: {model.Status}")
-        objective = float('nan') 
+        objective = None
 
     return ILPResult(
         num_vars=model.numVars,

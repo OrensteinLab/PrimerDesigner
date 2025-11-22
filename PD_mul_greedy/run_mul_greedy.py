@@ -44,16 +44,16 @@ def run_mul_greedy(
     # ---------- overall summary ----------
     summary_row = {
         "num_proteins": len(protein_names),
-        "greedy_total_efficiency": total_efficiency,
+        "total_primer_efficiency": total_efficiency,
         "greedy_time_sec": round(greedy_time, 3),
         "cross_hybridizations_cnt": cross_cnt,
         "proteins_with_reiterations_cnt": protein_cnt,
         "total_reiterations": re_iters,
         "unresolved_proteins_cnt": len(unresolved),
-        "unresolved_proteins": ",".join(unresolved),
-        "max_tm_threshold_C": MAX_TM,
+        "unresolved_proteins": ",".join(unresolved)
     }
-    pd.DataFrame([summary_row]).to_csv(output_dir / "summary.csv", index=False)
+    summary_df = pd.DataFrame([summary_row])
+    summary_df.to_csv(output_dir / "PD_mul_Greedy_summary.csv", index=False)
 
     # ---------- per-protein metrics ----------
     # per_protein_rows already contains per-protein timings & metadata
@@ -61,11 +61,9 @@ def run_mul_greedy(
         pd.DataFrame(per_protein_rows).to_csv(output_dir / "per_protein_metrics.csv", index=False)
 
     # ---------- paths ----------
-    paths_json_path = output_dir / "paths.json"
+    paths_json_path = output_dir / "primers_per_protein.json"
     out = {
-        "mode": "PD-mul-nh",
-        "max_tm_threshold_C": MAX_TM,
-        "paths": paths,  # {protein_name: [(start, end, 'f'/'r'), ...], ...}
+        "paths": paths
     }
     with open(paths_json_path, "w") as f:
         json.dump(out, f, indent=2)
@@ -74,7 +72,7 @@ def run_mul_greedy(
     print(f" Saved per-protein metrics to: {output_dir/'per_protein_metrics.csv'}")
     print(f" Saved paths to: {paths_json_path}")
 
-    return summary_row
+    return summary_df, paths
 
 
 def run_greedy(
@@ -175,8 +173,8 @@ def run_greedy(
             "graph_time_sec": round(graph_time, 4),
             "iterations": iters_for_this_protein,
             "resolved": bool(path_found),
-            "path_len": (len(paths[protein_name]) if path_found else 0),
-            "path_efficiency": (float(primer_df.loc[paths[protein_name], 'efficiency'].sum())
+            "num_primers": (len(paths[protein_name]) if path_found else 0),
+            "primer_efficiency": (float(primer_df.loc[paths[protein_name], 'efficiency'].sum())
                                 if path_found else 0.0),
         })
 

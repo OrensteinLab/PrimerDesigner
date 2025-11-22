@@ -9,6 +9,7 @@ def run_greedy(graph, primer_df,args):
 
   path_ls = [[]]
   graph_sub = graph.copy()
+  feasible = True
   for i in range(args.num_proteins):
     nodes_to_remove = []
     for p,n in it.product(path_ls[-1],graph_sub.nodes()):
@@ -28,6 +29,11 @@ def run_greedy(graph, primer_df,args):
       path_ls.append([primer for primer in longest_path_dag(graph_sub, 's', 'd')[1:-1]])
     except:
       print(f'WARNING: No feasible primer sequence for lib_{i}; reduce number of libraries or relax constraints.')
+      feasible = False
+      break
+
+  if not feasible:
+    return [], None
 
   path_ls = path_ls[1:]
 

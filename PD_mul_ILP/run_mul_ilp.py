@@ -58,19 +58,16 @@ def run_mul_ilp(mutreg_regions, sequences_nt, protein_names, args):
     row = {
         "num_proteins": len(protein_names),
         "graph_time_sec": graph_time,
-        "graph_peak_mem_MB": graph_memory,
         "ilp_num_vars": getattr(ilp_res, "num_vars", None),
         "ilp_num_constraints": getattr(ilp_res, "num_constraints", None),
-        "ilp_single_forbidden_cnt": single_pair_cnt,
+        "ilp_intra_forbidden_cnt": single_pair_cnt,
         "ilp_inter_forbidden_cnt": multi_pairs_cnt,
         "forbidden_time_sec": forbidden_time,
         "ilp_setup_time_sec": getattr(ilp_res, "setup_time", None),
-        "ilp_setup_peak_mem_MB": getattr(ilp_res, "setup_memory", None),
         "ilp_optimize_time_sec": getattr(ilp_res, "ilp_time", None),
-        "ilp_optimize_peak_mem_MB": getattr(ilp_res, "ilp_memory", None),
-        "ilp_objective": getattr(ilp_res, "objective", None),
-        "ilp_path_length": sum(len(path) for path in (ilp_res.protein_paths or {}).values()),
-        "ilp_status": getattr(ilp_res, "status", None),
+        "ilp_feasibility": "FEASIBLE" if ilp_res.status == 2 else "INFEASIBLE",
+        "total_primer_efficiency": getattr(ilp_res, "objective", None), 
+        "num_primers": sum(len(path) for path in (ilp_res.protein_paths or {}).values()),
     }
     df = pd.DataFrame([row])
     header = not csv_path.exists()
@@ -84,10 +81,12 @@ def run_mul_ilp(mutreg_regions, sequences_nt, protein_names, args):
             out[name] = [node if isinstance(node, str) else list(node) for node in path]
         return out
 
-    json_path = outdir / f"paths_N{len(protein_names)}.json"
+    json_path = outdir / f"primers_N{len(protein_names)}.json"
     combined_paths = {
-        "ILP_paths": to_jsonable_paths(getattr(ilp_res, "protein_paths", {})),
+        "ILP_primers": to_jsonable_paths(getattr(ilp_res, "protein_paths", {})),
     }
     with open(json_path, "w") as f:
         json.dump(combined_paths, f, indent=2)
     print(f"[SAVE] Paths saved → {json_path}")
+
+    return df,ilp_res.protein_paths

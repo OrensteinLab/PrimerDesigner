@@ -227,7 +227,7 @@ def run_ilp(single_forbidden, multiple_forbidden, protein_names, graphs):
             print()
     else: 
         print(f"Model status: {model.Status}")
-        objective = float('nan')  
+        objective = float('nan')
 
 
     return ILPResult(

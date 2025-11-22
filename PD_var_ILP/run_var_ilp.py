@@ -15,11 +15,8 @@ def run_var_ilp(sequence_nt, mutreg_nt, protein_name, args):
     primer_df = create_primer_df(sequence_nt, args)
 
     t0 = time.time()
-    tracemalloc.start()
     graph = create_graph(primer_df, len(mutreg_nt), args)
     graph_time = time.time() - t0
-    graph_peak_mb = tracemalloc.get_traced_memory()[1] / 1e6
-    tracemalloc.stop()
 
     # ---- Step 2: Greedy solution ----
     t1 = time.time()
@@ -31,12 +28,12 @@ def run_var_ilp(sequence_nt, mutreg_nt, protein_name, args):
 
     # ---- Step 4: CSV summary (no large paths) ----
     results = {
-    "protein_name": "SPAP",
+    "protein_name": protein_name,
+    "num_variants": getattr(args, "num_proteins", None),
     "seq_length": len(mutreg_nt),
     "graph_nodes": len(graph.nodes),
     "graph_edges": len(graph.edges),
     "graph_time_sec": round(graph_time, 3),
-    "graph_peak_mem_MB": round(graph_peak_mb, 1),
     "greedy_path_length": sum(len(path) for path in greedy_solution),
 
     # ---- ILP (updated field names) ----
@@ -44,14 +41,13 @@ def run_var_ilp(sequence_nt, mutreg_nt, protein_name, args):
     "ilp_path_length": sum(len(path) for path in ilp_res.paths),
     "ilp_num_constraints": ilp_res.num_constraints,
     "ilp_setup_time_sec": round(ilp_res.setup_time, 3),
-    "ilp_setup_peak_mem_MB": round(ilp_res.setup_peak_mem_mb, 1),
     "ilp_optimize_time_sec": round(ilp_res.optimize_time, 3),
-    "ilp_optimize_peak_mem_MB": round(ilp_res.optimize_peak_mem_mb, 1),
-    "ilp_objective": ilp_res.objective,
-    "ilp_status": ilp_res.status,
+    "ILP_primer_efficiency": ilp_res.objective,
+    "ILP_solution_feasibility": "FEASIBLE" if ilp_res.objective != None else "INFEASIBLE",
 
     # ---- Greedy ----
-    "greedy_objective": greedy_obj,
+    "greedy_solution_feasibility": "FEASIBLE" if greedy_obj!= None else "INFEASIBLE",
+    "greedy_primer_efficiency": greedy_obj,
     "greedy_time_sec": round(greedy_time, 3),
     }
 
@@ -61,8 +57,10 @@ def run_var_ilp(sequence_nt, mutreg_nt, protein_name, args):
     out_dir.mkdir(parents=True, exist_ok=True)
 
     # ---- Step 4: Save CSV ----
-    csv_path = out_dir / "mul_variants_results.csv"
-    pd.DataFrame([results]).to_csv(csv_path, index=False)
+    csv_path = out_dir / "var_ILP_results.csv"
+
+    results_df = pd.DataFrame([results])
+    results_df.to_csv(csv_path, index=False)
 
     # ---- Step 5: Save JSON paths ----
     paths_out = {
@@ -77,6 +75,10 @@ def run_var_ilp(sequence_nt, mutreg_nt, protein_name, args):
         json.dump(paths_out, f, indent=2)
 
     # ---- Step 6: Print confirmation ----
-    print(f"✅ Saved summary to: {csv_path}")
-    print(f"✅ Saved paths to: {json_path}")
+    print(f"Saved summary to: {csv_path}")
+    print(f"Saved paths to: {json_path}")
+
+    return results_df, ilp_res.paths, greedy_solution
+
+
 

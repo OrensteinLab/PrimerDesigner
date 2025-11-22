@@ -7,7 +7,7 @@ import networkx as nx
 from General.primer_graphs import create_primer_df, create_graph
 from General.utils import *
 
-def run_shortest_path(sequence_nt, mutreg_nt, protein_name, args):
+def run_longest_path(sequence_nt, mutreg_nt, protein_name, args):
     """Single-protein shortest-path run:
     - Build graph
     - Compute shortest path (s->d)
@@ -20,11 +20,8 @@ def run_shortest_path(sequence_nt, mutreg_nt, protein_name, args):
     primer_df = create_primer_df(sequence_nt, args)
 
     t_graph0 = time.time()
-    tracemalloc.start()
     graph = create_graph(primer_df, len(mutreg_nt), args)
     graph_time = time.time() - t_graph0
-    graph_peak_mb = tracemalloc.get_traced_memory()[1] / 1e6
-    tracemalloc.stop()
 
     # ---- Shortest path (by edge weight) ----
     # NetworkX returns list of nodes: ['s', <primer_nodes...>, 'd']
@@ -50,10 +47,9 @@ def run_shortest_path(sequence_nt, mutreg_nt, protein_name, args):
         "graph_nodes": len(graph.nodes),
         "graph_edges": len(graph.edges),
         "graph_time_sec": round(graph_time, 3),
-        "graph_peak_mem_MB": round(graph_peak_mb, 1),
-        "shortest_path_cost": primer_cost,
-        "status": status,
+        "longest_path_efficiency": primer_cost,
         "total_time_sec": round(total_time, 3),
+        "num_primers": len(primer_path_nodes),
     }
     df = pd.DataFrame([row])
 
@@ -62,17 +58,19 @@ def run_shortest_path(sequence_nt, mutreg_nt, protein_name, args):
     out_dir.mkdir(parents=True, exist_ok=True)
 
     # ---- CSV summary ----
-    csv_path = out_dir / "PD_single_results.csv"
+    csv_path = out_dir / "PD_single_LPath_results.csv"
     df.to_csv(csv_path, index=False)
 
     # ---- Paths JSON ----
-    paths_json_path = out_dir / "primer_paths.json"
+    paths_json_path = out_dir / "PD_single_LPath_selected_primers.json"
     with open(paths_json_path, "w") as f:
         json.dump({
             "protein_name": protein_name,
-            "shortest_path_nodes": primer_path_nodes
+            "primers_selected": primer_path_nodes
         }, f, indent=2)
 
-    print(f"✅ Saved CSV summary to: {csv_path}")
-    print(f"✅ Saved path details to: {paths_json_path}")
+    print(f"Saved CSV summary to: {csv_path}")
+    print(f"Saved path details to: {paths_json_path}")
+
+    return df, primer_path_nodes
 
