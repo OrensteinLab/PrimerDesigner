@@ -2,7 +2,7 @@ import math
 import pandas as pd
 import primer3 as p3
 from Bio.Seq import Seq
-from General.utils import *  # expects PCR (thermoanalysis), revcomp, subsequences, upstream_nt
+import General.utils as GU 
 
 # ====== parameter sets from the paper (S-shape), excluding SNP/poly ======
  # (MinO,MaxO, Min,Max, MinL,MaxL)
@@ -109,37 +109,37 @@ def create_primer_df(sequence_nt, args):
 
     # Forward primers
     primer_f = pd.DataFrame(columns=['seq', 'start', 'stop', 'fr', 'len'])
-    primer_f[['seq','start','stop','len']] = subsequences(sequence_nt, args.primer_lmin, args.primer_lmax)
+    primer_f[['seq','start','stop','len']] = GU.subsequences(sequence_nt, args.primer_lmin, args.primer_lmax)
     primer_f['fr'] = 'f'
 
     # Shift positions so 0 aligns to start of mutreg
-    primer_f['start'] = primer_f.start - len(UPSTREAM_NT)
-    primer_f['stop']  = primer_f.stop  - len(UPSTREAM_NT)
+    primer_f['start'] = primer_f.start - len(GU.UPSTREAM_NT)
+    primer_f['stop']  = primer_f.stop  - len(GU.UPSTREAM_NT)
 
     # Reverse primers at same loci (reverse-complement sequences)
     primer_r = primer_f[['seq','start','stop','fr','len']].copy()
     primer_r['fr']  = 'r'
-    primer_r['seq'] = primer_r.seq.apply(revcomp)
+    primer_r['seq'] = primer_r.seq.apply(GU.revcomp)
 
     primer_df = pd.concat([primer_f, primer_r])
     primer_df.sort_values(by=['start','stop','fr'], inplace=True)
 
     # ---- raw features needed for scoring ----
     primer_df['gc'] = primer_df.seq.apply(calc_gc)
-    primer_df['tm'] = primer_df.seq.apply(PCR.calc_tm)
+    primer_df['tm'] = primer_df.seq.apply(GU.PCR.calc_tm)
 
     # hairpin & homodimer (we’ll use Tm for the “self” feature)
-    hp_res = primer_df.seq.apply(lambda s: PCR.calc_hairpin(s).todict())
+    hp_res = primer_df.seq.apply(lambda s: GU.PCR.calc_hairpin(s).todict())
     primer_df['hp_tm'] = hp_res.apply(lambda d: d['tm'])
 
-    ho_res = primer_df.seq.apply(lambda s: PCR.calc_homodimer(s).todict())
+    ho_res = primer_df.seq.apply(lambda s: GU.PCR.calc_homodimer(s).todict())
     primer_df['ho_tm'] = ho_res.apply(lambda d: d['tm'])
 
     # 3' end features
     primer_df['endA']  = primer_df.seq.apply(count_terminal_As_3prime)
 
     # 3' end stability of last 5-nt
-    endstab_res = primer_df.seq.apply(lambda s: PCR.calc_end_stability(s[-5:], revcomp(s[-5:])).todict())
+    endstab_res = primer_df.seq.apply(lambda s: GU.PCR.calc_end_stability(s[-5:], GU.revcomp(s[-5:])).todict())
     # Primer3 returns dG in cal/mol; convert to kcal/mol like you did for hp/ho:
     primer_df['end_dg'] = endstab_res.apply(lambda res: res['dg'] * 1e-3)
 
