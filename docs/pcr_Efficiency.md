@@ -18,7 +18,7 @@ cd pcrEfficiency
 Create and activate a Python 2.7 environment:
 
 ```bash
-conda create -n pcrEfficiency_py2 \
+conda create -n pcrEfficiency \
     python=2.7.15 \
     r-base=3.6 \
     r-mgcv \
