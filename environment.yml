@@ -1,5 +1,7 @@
 name: primer_env
 channels:
+  - conda-forge
+  - bioconda
   - defaults
 dependencies:
   - python=3.9
@@ -8,7 +10,12 @@ dependencies:
   - networkx=3.2
   - matplotlib       
   - pip
+  - zeromq
+  - ipykernel
+  - pyzmq
   - pip:
       - biopython==1.85
       - primer3-py==2.2.0
       - gurobipy==12.0.3
+
+

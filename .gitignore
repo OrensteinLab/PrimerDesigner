@@ -1,0 +1,14 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Gurobi license (PRIVATE — never commit)
+gurobi.json
+
+# Shell scripts
+*.sh
+
+logs/
+Temp/

@@ -82,7 +82,7 @@ Example:
 To execute PrimerDesginer, use the following command:
 
 ```bash
-python ./tool.py --version <version> --file_path <file-path>  --output <output-file>
+python ./tool.py --version <version> --file_path <file-path>  --config config.json --output <output-file>
 ```
 - **file_path**: The file path of the protein coding-sequences
 - **version**: Specifies which version of the algorithm to run. The options are: `PD-single-LPath`, `PD-mul-ILP`, `PD-mul-Greedy` and `PD-var-ILP` (default:  `PD-single-LPath`)
@@ -139,9 +139,15 @@ Example command:
 python ./tool.py --version PD-mul-ILP --file_path example_proteins.txt  --config config.json --output run_output --primer_lmin 20 --primer_lmax 26 --oligo_lmin 180 --oligo_lmax 200
 ```
 
+## Running Comparisons with Existing Tools
 
+To reproduce comparisons between PrimerDesigner and existing tools, follow the guide below:
 
+- **Comparison workflow:**  
+  See [docs/Running_comparisons.md](docs/Running_comparisons.md)
 
+- **PCR efficiency evaluation using the pcrEfficiency model:**  
+  See [docs/pcr_Efficiency.md](docs/pcr_Efficiency.md)
 
 
 
