@@ -1,13 +1,11 @@
 import time
-import json
-import tracemalloc
 from pathlib import Path
 import pandas as pd
 import networkx as nx
 from General.primer_graphs import create_primer_df, create_graph
 from General.utils import *
 
-def run_longest_path(sequence_nt, mutreg_nt, protein_name, args):
+def run_longest_path(sequence_nt, mutreg_nt, protein_name, args, cfg):
     """Single-protein shortest-path run:
     - Build graph
     - Compute shortest path (s->d)
@@ -17,31 +15,29 @@ def run_longest_path(sequence_nt, mutreg_nt, protein_name, args):
     t0 = time.time()
 
     # ---- Build primer table and graph ----
-    primer_df = create_primer_df(sequence_nt, args)
+    primer_df = create_primer_df(sequence_nt, args, cfg)
 
     t_graph0 = time.time()
     graph = create_graph(primer_df, len(mutreg_nt), args)
     graph_time = time.time() - t_graph0
 
-    # ---- Shortest path (by edge weight) ----
-    # NetworkX returns list of nodes: ['s', <primer_nodes...>, 'd']
+    # ---- Longest path (by edge weight) ----
     try:
         full_path = longest_path_dag(graph, 's', 'd')
-        # strip s/d for primer nodes only (they should match primer_df index)
+        # strip s/d for primer nodes only)
         primer_path_nodes = full_path[1:-1]
-        # cost = sum of node weights as you stored them on edges entering those nodes
-        # but you already stored the per-primer cost in primer_df, so:
+        # select primers in path and compute total efficiency
         primer_set = primer_df.loc[primer_path_nodes].copy().reset_index()
         primer_cost = float(primer_set['efficiency'].sum())
-        status = "OK"
+
     except nx.NetworkXNoPath:
+        print("[WARN] No valid path found for {protein_name}. Skipping.")
         primer_path_nodes = []
         primer_cost = float('nan')
-        status = "NO_PATH"
 
     total_time = time.time() - t0
 
-    # ---- CSV (no path in CSV) ----
+    # ---- CSV data ----
     row = {
         "protein_name": protein_name,
         "graph_nodes": len(graph.nodes),
@@ -61,16 +57,20 @@ def run_longest_path(sequence_nt, mutreg_nt, protein_name, args):
     csv_path = out_dir / "PD_single_LPath_results.csv"
     df.to_csv(csv_path, index=False)
 
-    # ---- Paths JSON ----
-    paths_json_path = out_dir / "PD_single_LPath_selected_primers.json"
-    with open(paths_json_path, "w") as f:
-        json.dump({
-            "protein_name": protein_name,
-            "primers_selected": primer_path_nodes
-        }, f, indent=2)
+    # ---- Paths CSV ----
+    paths_csv_path = out_dir / "PD_single_LPath_selected_primers.csv"
 
-    print(f"Saved CSV summary to: {csv_path}")
-    print(f"Saved path details to: {paths_json_path}")
+    # save selected primers in csv
+    if len(primer_path_nodes) > 0:
+        primer_set = primer_set.rename(columns={"fr": "orientation"})
+        primer_set.insert(0, "protein_name", protein_name)
+        primer_set.insert(1, "primer_index", range(len(primer_set)))
+        primer_set = primer_set[['protein_name','primer_index','start','stop','orientation','seq','efficiency']]
+        primer_set.to_csv(paths_csv_path, index=False)
+    else:
+        pd.DataFrame().to_csv(paths_csv_path, index=False)
+
+    print(f"Saved selected primers to: {paths_csv_path}")
 
     return df, primer_path_nodes
 

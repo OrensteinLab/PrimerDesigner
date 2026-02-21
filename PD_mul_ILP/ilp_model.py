@@ -2,10 +2,8 @@ import time
 import tracemalloc
 from General.utils import *
 import gurobipy as gp
-
 from dataclasses import dataclass
 from typing import Dict, Any
-import gurobipy as gp
 import time, tracemalloc
 from PD_mul_ILP.brute_force import *
 from itertools import combinations
@@ -22,7 +20,7 @@ class ILPResult:
     objective: float
     status: int
 
-def find_forbidden_pairs(protein_names, sequences_nt, args):
+def find_forbidden_pairs(protein_names, sequences_nt, args, cfg):
 
     multiple_forbidden_cnt=0
     single_forbidden_cnt=0
@@ -36,7 +34,7 @@ def find_forbidden_pairs(protein_names, sequences_nt, args):
     for idx, (protein, sequence) in enumerate(zip(protein_names, sequences_nt), start=1):
         print(f"[{idx}/{total_single}] Processing {protein}...")
 
-        forbidden_pairs = find_forbidden_pairs_intra(sequence,args)
+        forbidden_pairs = find_forbidden_pairs_intra(sequence,args, cfg)
 
         single_forbidden_cnt += len(forbidden_pairs)
 
@@ -62,7 +60,7 @@ def find_forbidden_pairs(protein_names, sequences_nt, args):
         protein2 = protein_names[p2]
 
         # Find forbidden pairs between two protein sequences
-        forbidden_pairs = find_forbidden_pairs_inter(sequence1,sequence2,args)
+        forbidden_pairs = find_forbidden_pairs_inter(sequence1,sequence2,args,cfg)
 
         multiple_forbidden[(protein1,protein2)]= forbidden_pairs
 
@@ -126,7 +124,7 @@ def add_constraints(graphs, protein_names, single_forbidden, multiple_forbidden,
 
         model_vars[protein] = protein_vars
 
-    # add inter-forbidden pairs constraints between multiple difference proteins
+    # add inter-forbidden pairs constraints between multiple differennt proteins
     # Generate all possible pairs of proteins
     protein_pairs = list(combinations(range(len(protein_names)), 2))
 
@@ -151,7 +149,6 @@ def add_constraints(graphs, protein_names, single_forbidden, multiple_forbidden,
         for (p1, p2) in multi_forbidden_pairs),
         name="inter_protein_forbidden"
         )
-
 
     return model_vars
 

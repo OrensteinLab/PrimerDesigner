@@ -1,0 +1,2 @@
+protein_name,graph_nodes,graph_edges,graph_time_sec,graph_peak_mem_MB,PD_single_avg_efficiency,QuickChange_avg_efficiency,PrimalScheme_avg_efficiency,PD_single_primers,QuickChange_primers,PrimalScheme_primers,shortest_path_time,total_time_sec
+SPAP,38738,3300211,115.106,1486.4,0.49444937597731675,0.17088562408617902,0.2648045651706166,24,26,22,8.948649883270264,149.418

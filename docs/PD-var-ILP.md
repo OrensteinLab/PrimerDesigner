@@ -29,11 +29,32 @@ Specific parameters for PD-var-ILP include:
   *Default:* 6
 
 ## Output
-All results are saved to the specified output directory.  
-The output includes:
 
-- total runtime  
-- memory usage statistics  
-- ILP objective value - the primer efficiency
+Results are written to the specified output directory and include the following files:
 
-A JSON file containing the optimal primer-selection paths for each variant is also produced.
+### 1. Summary file
+
+**var_ILP_results.csv**
+
+This file contains summary statistics for the run, including:
+
+- total runtime and runtime of major program stages  
+- peak memory usage  
+- total number of selected primers by greedy and ILP algorithms
+- ILP and greedy objective values (efficiencies) 
+
+---
+### 2. Primer selection file
+
+**PD_var_ILP_selected_primers_greedy.csv & PD_var_ILP_selected_primers_ILP.csv**
+
+These file contains the optimal primer-selection paths for each protein variant for the freeedy and ILP approaches.
+
+For each variant, the file records:
+
+- ordered list of selected primers  
+- start and end positions relative to the reference sequence  
+- strand (`f` for forward, `r` for reverse)  
+- primer sequence (5′→3′)  
+- primer length  
+

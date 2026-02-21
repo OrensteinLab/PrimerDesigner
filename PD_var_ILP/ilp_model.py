@@ -18,19 +18,20 @@ class ILPResult:
     objective: float
     status: int    
 
-def ilp_model(graph, sequence_nt, mutreg_nt, args):
+def ilp_model(graph, sequence_nt, mutreg_nt, args,cfg):
     
     print("Running ILP")
     setup_start = time.time()
     tracemalloc.start()
+
     # Create Gurobi Model
-    model = get_model()
+    model = get_model("gurobi.json")
 
     # Getting Nodes/Edges
     graph_edges = graph.edges(data=True)
     graph_nodes = [node for node in graph.nodes if node != 's' and node != 'd']  # removing s & d nodes
 
-    mutreg_start = len(UPSTREAM_NT)
+    mutreg_start = len(cfg.upstream)
     l_range = (args.allowed_overlap + 1, args.primer_lmax + 1)
 
     def create_bins(l_range):
@@ -95,7 +96,7 @@ def ilp_model(graph, sequence_nt, mutreg_nt, args):
     ij = gp.tuplelist()
     w_ij = gp.tupledict()
 
-    # add dinary variable for each graph edge
+    # add binary variable for each graph edge
     for edge in graph_edges:
         l = (str(edge[0]), str(edge[1]))
         ij.append(l)

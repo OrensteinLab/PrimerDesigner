@@ -2,7 +2,7 @@ from General.primer_graphs import *
 import time
 import tracemalloc
 
-def create_graphs(mutreg_regions, sequences_nt, protein_names,args):
+def create_graphs(mutreg_regions, sequences_nt, protein_names,args, cfg):
     """
     Create directed graphs for each protein sequence and measure the time and memory usage.
 
@@ -20,16 +20,12 @@ def create_graphs(mutreg_regions, sequences_nt, protein_names,args):
     tracemalloc.start()
 
     graphs = {}
-    primer_dfs = {}
 
     for i, (mutreg_nt, sequence, protein_name) in enumerate(zip(mutreg_regions, sequences_nt, protein_names)):
 
         print("Creating Graph for protein: ",i, "Protein name: ", protein_name)
 
-        # Create primer dataframe for the given sequence
-        primer_df = create_primer_df(sequence,args)
-
-        primer_dfs[protein_name] = primer_df
+        primer_df = create_primer_df(sequence,args, cfg)
 
         mutreg_l = len(mutreg_nt)
 
@@ -40,4 +36,4 @@ def create_graphs(mutreg_regions, sequences_nt, protein_names,args):
     graph_memory = tracemalloc.get_traced_memory()[1] / 10**6  # MB
     tracemalloc.stop()
 
-    return graphs, graph_time, graph_memory, primer_dfs
+    return graphs, graph_time, graph_memory

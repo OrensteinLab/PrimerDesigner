@@ -2,18 +2,9 @@
 from __future__ import annotations
 import numpy as np
 import multiprocessing as mp
-from dataclasses import dataclass
-from General.utils import * 
+import General.utils as GU
 
-
-# ---- calc_tm wrapper (heterodimer Tm) ----
-def calc_tm(seq1, seq2):
-    return PCR.calc_heterodimer(
-        seq1, seq2,).tm
-
-# ---------------------------
 # Worker globals (per-process)
-# ---------------------------
 _G = {}
 
 def _init_worker_stage1(seq1, seq2, lmin, lmax, max_tm, allowed_overlap):
@@ -23,6 +14,7 @@ def _init_worker_stage1(seq1, seq2, lmin, lmax, max_tm, allowed_overlap):
     _G["lmax"] = lmax
     _G["max_tm"] = max_tm
     _G["allowed_overlap"] = allowed_overlap
+    _G["PCR"] = GU.get_PCR()
 
 def _init_worker_stage2(seq1, seq2, lmin, lmax, max_tm, upstream_len):
     _G["seq1"] = seq1
@@ -31,15 +23,16 @@ def _init_worker_stage2(seq1, seq2, lmin, lmax, max_tm, upstream_len):
     _G["lmax"] = lmax
     _G["max_tm"] = max_tm
     _G["up"] = upstream_len
+    _G["PCR"] = GU.get_PCR()
 
-# ---------------------------
+
 # Stage 1: candidates at Lmax
-# ---------------------------
 def _stage1_chunk_inter(i_range):
     """Find Lmax×Lmax candidate (p1,p2) across two sequences."""
     seq1 = _G["seq1"]; seq2 = _G["seq2"]
     lmax = _G["lmax"]; max_tm = _G["max_tm"]
     n1, n2 = len(seq1), len(seq2)
+    calc = _G["PCR"].calc_heterodimer
     i_start, i_end = i_range
 
     buf = []
@@ -49,8 +42,7 @@ def _stage1_chunk_inter(i_range):
         sub1 = seq1[p1:p1 + lmax]
         for p2 in range(0, n2 - lmax + 1):
             sub2 = seq2[p2:p2 + lmax]
-            # NOTE: you must define calc_tm() globally
-            if calc_tm(sub1, sub2) >= max_tm:
+            if calc(sub1, sub2).tm >= max_tm:
                 buf.extend((p1, p1 + lmax, p2, p2 + lmax))
     if not buf:
         return np.empty((0, 4), dtype=np.int32)
@@ -63,6 +55,7 @@ def _stage1_chunk_intra(i_range):
     max_tm = _G["max_tm"]
     sigma = _G["allowed_overlap"]
     L = len(seq)
+    calc = _G["PCR"].calc_heterodimer
     i_start, i_end = i_range
 
     buf = []
@@ -80,7 +73,7 @@ def _stage1_chunk_intra(i_range):
 
         for p2_start in range(j_lo, j_hi):
             sub2 = seq[p2_start:p2_start + lmax]
-            if calc_tm(sub1, sub2)  >= max_tm:
+            if calc(sub1, sub2).tm >= max_tm:
                 buf.extend((p1_start, p1_end, p2_start, p2_start + lmax))
 
     if not buf:
@@ -88,9 +81,7 @@ def _stage1_chunk_intra(i_range):
     return np.fromiter(buf, dtype=np.int32).reshape(-1, 4)
 
 
-# ---------------------------
 # Stage 2: expand candidates
-# ---------------------------
 def _stage2_expand(cand_row):
     """Expand one Lmax×Lmax candidate into all sub-length cross-hyb hits."""
     seq1 = _G["seq1"]; seq2 = _G["seq2"]
@@ -98,6 +89,7 @@ def _stage2_expand(cand_row):
     p1_start, p1_end, p2_start, p2_end = map(int, cand_row)
     primer1 = seq1[p1_start:p1_end]
     primer2 = seq2[p2_start:p2_end]
+    calc = _G["PCR"].calc_heterodimer
 
     out_buf = []
     for len1 in range(lmin, lmax + 1):
@@ -108,7 +100,7 @@ def _stage2_expand(cand_row):
                 sub1 = primer1[s1:s1 + len1]
                 for s2 in range(max_s2 + 1):
                     sub2 = primer2[s2:s2 + len2]
-                    if calc_tm(sub1, sub2)  >= max_tm:
+                    if calc(sub1, sub2).tm >= max_tm:
                         a = p1_start + s1 - up
                         b = a + len1
                         c = p2_start + s2 - up
@@ -118,32 +110,32 @@ def _stage2_expand(cand_row):
         return np.empty((0, 4), dtype=np.int32)
     return np.fromiter(out_buf, dtype=np.int32).reshape(-1, 4)
 
-# ---------------------------
 # Generic two-stage driver
-# ---------------------------
 def _two_stage_driver(
     seq1: str,
     seq2: str,
     args,
-    stage1_func,
+    stage1_func,cfg
 ) -> set[tuple[tuple[int,int], tuple[int,int]]]:
     """Two-stage pipeline with parallel Stage 1 (candidates) and Stage 2 (expansion)."""
 
-    lmin, lmax, max_tm = args.primer_lmin, args.primer_lmax, MAX_TM
+    lmin, lmax, max_tm = args.primer_lmin, args.primer_lmax, cfg.max_tm
     n1 = len(seq1)
     last = n1 - lmax + 1  # p1 starts that fit Lmax
     if last <= 0:
         return set()
 
     # find number of available processors
-    procs = max(1, mp.cpu_count() - 1)
+    procs =  min(16, mp.cpu_count())
 
-    # stage-1 chunk (how many p1 positions per task)
-    chunk = last // max(1, procs)
+    # stage-1 chunk (give each worker several tasks at once)
+    chunk = max(1, last // (procs * 4))
 
     ranges = [(i, min(i + chunk, last)) for i in range(0, last, chunk)]
     if not ranges:
         return set()
+    
+    stage1_chunksize = 4
 
     ctx = mp.get_context("spawn")
 
@@ -153,7 +145,7 @@ def _two_stage_driver(
         initializer=_init_worker_stage1,
         initargs=(seq1, seq2, lmin, lmax, max_tm, args.allowed_overlap),
     ) as pool:
-        cand_iter = pool.imap_unordered(stage1_func, ranges, chunksize=1)
+        cand_iter = pool.imap_unordered(stage1_func, ranges, chunksize=stage1_chunksize)
         cand_list = [arr for arr in cand_iter if arr.size]
 
     if not cand_list:
@@ -161,33 +153,33 @@ def _two_stage_driver(
 
     candidates = np.vstack(cand_list)
 
+    stage2_chunksize = max(1, min(64, candidates.shape[0] // (procs * 8)))
+
     # ----- Stage 2: expand survivors -----
     with ctx.Pool(
         processes=procs,
         initializer=_init_worker_stage2,
-        initargs=(seq1, seq2, lmin, lmax, max_tm, len(UPSTREAM_NT)),
+        initargs=(seq1, seq2, lmin, lmax, max_tm, len(cfg.upstream)),
     ) as pool:
-        parts_iter = pool.imap_unordered(_stage2_expand, candidates, chunksize=1)
+        parts_iter = pool.imap_unordered(_stage2_expand, candidates, chunksize=stage2_chunksize)
         out: set[tuple[tuple[int,int], tuple[int,int]]] = set()
         for arr in parts_iter:
             if arr.size:
                 out.update(((int(a), int(b)), (int(c), int(d))) for a, b, c, d in arr)
     return out
 
-# ---------------------------
 # Public API (two functions)
-# ---------------------------
-def find_forbidden_pairs_inter(seq1: str, seq2: str, args):
+def find_forbidden_pairs_inter(seq1: str, seq2: str, args, cfg):
     """
     Find all cross-hybridizing primer pairs BETWEEN two sequences (inter-sequence).
 
     """
-    return _two_stage_driver(seq1, seq2, args, stage1_func=_stage1_chunk_inter)
+    return _two_stage_driver(seq1, seq2, args, stage1_func=_stage1_chunk_inter, cfg=cfg)
 
-def find_forbidden_pairs_intra(seq: str, args):
+def find_forbidden_pairs_intra(seq: str, args, cfg):
     """
     Find all cross-hybridizing primer pairs WITHIN the same sequence (intra-sequence).
   
     """
-    return _two_stage_driver(seq, seq, args, stage1_func=_stage1_chunk_intra)
+    return _two_stage_driver(seq, seq, args, stage1_func=_stage1_chunk_intra, cfg=cfg)
 

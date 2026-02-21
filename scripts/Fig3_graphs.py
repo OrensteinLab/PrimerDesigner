@@ -4,15 +4,14 @@ import numpy as np
 import math
 import matplotlib.lines as mlines
 
-length_df = pd.read_csv('../Results/PD-var-ILP-increasing-lengths.csv')
-
+length_df = pd.read_csv('Results/PD-var-ILP-increasing-lengths.csv')
 
 num_primers_ilp = length_df['ilp_path_length']/2
 num_primers_greedy = length_df['greedy_path_length']/2
 
-# Extracting data from the DataFrame
 lengths = length_df['seq_length']
 
+# calculate average efficiency per primer pair (objective / number of primers) for both ILP and Greedy
 ilp_efficiency = length_df['ilp_objective'] / (num_primers_ilp*2)
 
 ilp_time = length_df['ilp_optimize_time_sec'] + length_df['ilp_setup_time_sec']
@@ -88,7 +87,12 @@ ax2.set_ylim(-50,2100)
 
 for x, y, n in zip(lengths, ilp_time, num_primers_ilp):
 
-    ax2.text(x + 25, y - 14, str(int(y)), ha='center', va='top', color=ilp_color, fontsize=15, zorder=10)
+    if x == 1426:
+        ax2.text(x + 25, y - 70, str(int(y)), ha='center', va='top', color=ilp_color, fontsize=15,
+                 zorder=10)
+        continue
+
+    ax2.text(x + 25, y - 25, str(int(y)), ha='center', va='top', color=ilp_color, fontsize=15, zorder=10)
 
 
 
@@ -97,7 +101,9 @@ for x, y, n in zip(lengths, greedy_time, num_primers_greedy):
     ax2.text(x + 25, y + 6, str(int(y)), ha='center', va='bottom', color=greedy_color, fontsize=15, zorder=10)
 
 
-variant_df = pd.read_csv('../Results/PD-var-ILP-increasing_variants.csv')
+variant_df = pd.read_csv('Results/PD-var-ILP-increasing_variants.csv')
+
+variant_df = variant_df.loc[variant_df['num_variants'] <= 6]
 
 # Extract the necessary data for plotting
 num_proteins = variant_df['num_variants']
@@ -194,7 +200,7 @@ ax4.text(
     transform=ax4.get_xaxis_transform()
 )
 
-protein_df = pd.read_csv("../Results/PD-var-ILP-different-proteins.csv")
+protein_df = pd.read_csv("Results/PD-var-ILP-different-proteins.csv")
 
 proteins = protein_df['protein_name']
 
@@ -252,9 +258,6 @@ ax5.set_ylabel('Average primer efficiency', fontsize=20)
 ax5.set_xticks(index + bar_width / 2)
 ax5.set_xticklabels(xtick_labels, fontsize=17, ha='center')
 
-# Set y-axis to logarithmic scale
-
-# ax5.set_ylim(0, 33)
 
 
 bars_run_ilp = ax6.bar(index, total_run_ilp, bar_width, label='PD-var-ILP')
@@ -290,4 +293,4 @@ ax6.set_ylim(0.1, 2500)
 
 plt.subplots_adjust(left=0.05, right=0.96, wspace=0.15, bottom=0.08, top=0.98)
 
-plt.savefig("../Results/figure3.png", dpi=300)
+plt.savefig("Results/figure3.png", dpi=300)

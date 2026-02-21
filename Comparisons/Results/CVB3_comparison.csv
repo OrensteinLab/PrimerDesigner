@@ -1,0 +1,2 @@
+graph_nodes,graph_edges,graph_time_sec,graph_peak_mem_MB,PD_avg_efficiency,CVB3_avg_efficiency,PD_single_primers,CVB3_primers,longest_path_time,total_time_sec
+96348,14189030,540.453,6392.4,0.46433664453438345,0.2550061618391629,44,36,38.806190490722656,640.082

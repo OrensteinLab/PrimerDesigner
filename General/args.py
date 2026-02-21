@@ -4,8 +4,9 @@ def get_args():
 
     parser = argparse.ArgumentParser(description='Process some sequences.')
     parser.add_argument('--version', type=str, default='PD-single-LPath', help='Version to use. Options: PD-single-LPath, PD-mul-Greedy, PD-mul-ILP,PD-var-ILP', choices=['PD-single-LPath', 'PD-mul-Greedy', 'PD-mul-ILP','PD-var-ILP'])
-    parser.add_argument('--file_path', type=str, required=True, help='Path of the input file')
-    parser.add_argument('--output', type=str,  required=True, help='Path of the csv program output file')
+    parser.add_argument('--file_path', type=str, default="input.txt", help='Path of the input file containing mutreg regions')
+    parser.add_argument('--output', type=str,  default="results", help='Path of the csv program output files')
+    parser.add_argument('--config', type=str,  default="config.json", help='Path of the config json file containing upstream and downstream regions')
     parser.add_argument('--primer_lmin', type=int, default=18, help='Minimum primer length')
     parser.add_argument('--primer_lmax', type=int, default=30, help='Maximum primer length')
     parser.add_argument('--overlap_lmin', type=int, default=45, help='Minimum oligo overlap length')

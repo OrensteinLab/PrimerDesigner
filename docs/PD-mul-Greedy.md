@@ -20,10 +20,32 @@ All parameters match the global program configuration described in the main READ
 
 ## Output
 
-Results are written to the specified output directory.
-The output includes a summary CSV containing:
-- total runtime
-- memory usage statistics
-- efficiency of the primer sets
+Results are written to the specified output directory and include the following files:
 
-A JSON file containing the optimal primer-selection paths for each protein is also produced.
+### 1. Summary file
+
+**PD_mul_Greedy_summary.csv**
+
+This file contains summary statistics for the run, including:
+
+- total runtime (seconds)  
+- peak memory usage  
+- number of selected primers per protein  
+- Total efficiency of the selected primer sets  
+
+---
+
+### 2. Primer selection file
+
+**PD_mul_Greedy_selected_primers.csv**
+
+This file contains the selected primers for each protein, including:
+
+- protein name  
+- primer ID  
+- start and end positions  
+- strand (`f` for forward, `r` for reverse)  
+- primer sequence (5′→3′)  
+- primer length  
+
+Each row corresponds to a single primer in the selected primer set.

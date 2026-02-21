@@ -16,11 +16,33 @@ SHP2  ATGACATCGCGGAGATGGTTTCACCCAAATATCACTGGTGTGGAGGCAGAAAACCTACTGTTGACAAGAGGAGT
 The parameters are identical to the global program parameters described in the main README and are provided through command-line arguments.
 
 ## Output
-All results are written to the specified output directory.  
-The output includes a summary CSV containing:
+
+Results are written to the specified output directory and include the following files:
+
+### 1. Summary file
+
+**PD_single_LPath_results.csv**
+
+This file contains summary statistics for the run, including:
 
 - total runtime  
-- memory usage statistics  
-- the efficiency of the selected primer set
+- peak memory usage  
+- number of selected primer pairs  
+- total predicted efficiency of the selected primer set  
 
-A JSON file containing the optimal primer-selection paths for each variant is also produced.
+---
+
+### 2. Primer selection file
+
+**PD_single_LPath_selected_primers.csv**
+
+This file contains the optimal primer-selection path for the input protein.
+
+Each row corresponds to a selected primer and includes:
+
+- protein name  
+- primer index in the assembly path  
+- start and end positions relative to the coding sequence  
+- strand (`f` for forward, `r` for reverse)  
+- primer sequence (5′→3′)  
+- primer length  

@@ -1,4 +1,3 @@
-import os
 import time
 import json
 import pandas as pd
@@ -7,35 +6,32 @@ from PD_mul_ILP.create_graphs import *
 from PD_mul_ILP.ilp_model import *
 from General.args import *
 
-import sys
-
-sys.argv = [
-        sys.argv[0],
-        "--file_path", "data/10_protein_coding_sequences.txt",
-        "--output", "Experiment_results/mul_ilp",
-        ]
-
-args = get_args()
 
 def main():
+
+    args = get_args()
+
+    args.output = "Results"
+
+    args.file_path = "data/10_protein_coding_sequences.txt"
+
+    cfg = GU.load_config()
 
     # Create output directory if not exists
     output_dir = Path(args.output)
     output_dir.mkdir(parents=True, exist_ok=True)
     print(f"[INFO] Output directory: {output_dir.resolve()}")
 
-    # ============================================================
-    # LOAD SEQUENCES
-    # ============================================================
+
+    # load sequences
     print(f"[INFO] Reading protein coding sequences from: {args.file_path}")
-    all_mutreg_regions, all_full_sequences, all_protein_names = read_sequences(args.file_path)
+    all_mutreg_regions, all_full_sequences, all_protein_names = read_sequences(args.file_path, cfg)
     print(f"[INFO] Total proteins loaded: {len(all_protein_names)}")
     overall_start = time.time()
-    # ============================================================
-    # MAIN LOOP: number of proteins 2–10
-    # ============================================================
-    summary_rows = []  # <-- collect rows for a final aggregated CSV
-    for i in range(2,len(all_protein_names)):
+
+    # main loop
+    summary_rows = []  
+    for i in range(1,len(all_protein_names)+1):
         print(f"\n[INFO] Processing {i} protein(s)...")
 
         # Subset of first i proteins
@@ -43,12 +39,11 @@ def main():
         sequences_nt = all_full_sequences[:i]
         protein_names = all_protein_names[:i]
 
-        # --------------------------------------------------------
-        # GRAPH CREATION
-        # --------------------------------------------------------
+
+        # graph creation
         print(f"[STEP] Creating graphs for {i} proteins...")
-        graphs, graph_time, graph_memory, primer_dfs = create_graphs(
-            mutreg_regions, sequences_nt, protein_names, args
+        graphs, graph_time, graph_memory = create_graphs(
+            mutreg_regions, sequences_nt, protein_names, args, cfg
         )
         print(f"[DONE] Graphs created in {graph_time:.2f} sec (peak {graph_memory:.1f} MB).")
 
@@ -56,16 +51,14 @@ def main():
         print("Finding forbidden pairs across proteins...")
         t_forbid = time.time()
         single_forbidden, multiple_forbidden, single_pair_cnt, multi_pairs_cnt = find_forbidden_pairs(
-            protein_names, sequences_nt, args
+            protein_names, sequences_nt, args,cfg
         )
         forbidden_time = time.time() - t_forbid
         print(f"[DONE] Forbidden pairs in {forbidden_time:.2f} sec "
               f"(single={single_pair_cnt}, inter={multi_pairs_cnt}).")
 
 
-        # --------------------------------------------------------
-        # ILP OPTIMIZATION
-        # --------------------------------------------------------
+        # ILP optimization
         print(f"[STEP] Running ILP model...")
         ilp_res = run_ilp(single_forbidden, multiple_forbidden, protein_names, graphs)
         print(
@@ -75,12 +68,8 @@ def main():
 
         del single_forbidden, multiple_forbidden
 
-        # ============================================================
-        # SAVE RESULTS (CSV + JSON per iteration)
-        # ============================================================
-
+        # save results for this iteration
         # ---- CSV ----
-        csv_path = output_dir / f"results_{i:02d}_proteins.csv"
         results = {
             "num_proteins": len(protein_names),
             "graph_time_sec": graph_time,
@@ -99,38 +88,11 @@ def main():
             "ilp_status": ilp_res.status,
         }
 
-        pd.DataFrame([results]).to_csv(csv_path, index=False)
-        print(f"[SAVE] CSV saved → {csv_path}")
-
         summary_rows.append(results.copy())
 
-        # ---- JSON ----
-        json_path = output_dir / f"paths_{i:02d}_proteins.json"
-
-        def to_jsonable_paths(paths_dict):
-            out = {}
-            for name, path in (paths_dict or {}).items():
-                out[name] = [
-                    node if isinstance(node, str) else list(node)
-                    for node in path
-                ]
-            return out
-
-        combined_paths = {
-            "ILP_paths": to_jsonable_paths(ilp_res.protein_paths),
-        }
-
-        with open(json_path, "w") as f:
-            json.dump(combined_paths, f, indent=2)
-        print(f"[SAVE] JSON saved → {json_path}")
-
-        print(f"[DONE] Iteration {i} complete.\n")
-
-    # ============================================================
     # FINAL SUMMARY CSV (all i)
-    # ============================================================
     final_df = pd.DataFrame(summary_rows)
-    final_csv = output_dir / "results_all_proteins.csv"
+    final_csv = output_dir / "PD-mul-ILP.csv"
     final_df.to_csv(final_csv, index=False)
     print(f"[SAVE] Aggregated CSV saved → {final_csv}")
 

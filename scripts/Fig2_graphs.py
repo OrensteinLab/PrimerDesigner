@@ -4,7 +4,7 @@ from scipy import stats
 import ast
 import matplotlib.lines as mlines
 
-run_df = pd.read_csv("../Results/PD-mul-ILP.csv")
+run_df = pd.read_csv("Results/PD-mul-ILP.csv")
 
 num_proteins= run_df["num_proteins"]
 
@@ -67,7 +67,7 @@ ax2.set_ylabel('Runtime [seconds]', fontsize=26)
 ax2.tick_params(axis='y', labelsize=24)
 ax2.tick_params(axis='x', labelsize=24)
 ax2.grid(False)
-ax2.set_ylim(-200,4000)
+ax2.set_ylim(-200,6500)
 
 fig.text(0.25, 0.03, 'Number of proteins\n(Number of potential cross-hybridization risks)', ha='center', fontsize=26)
 fig.text(0.75, 0.03, 'Number of proteins\n(Number of potential cross-hybridization risks)', ha='center', fontsize=26)
@@ -87,6 +87,9 @@ vertical_offset = 75
 
 # Adjusting text annotations for runtime
 for x, y in zip(num_proteins, ilp_time):
+    if x == 9:
+        ax2.text(x - 0.25 , y + vertical_offset, str(int(y)), ha='center', va='bottom', color=ilp_color, fontsize=20, zorder=10)
+        continue
     ax2.text(x, y + vertical_offset, str(int(y)), ha='center', va='bottom', color=ilp_color, fontsize=20, zorder=10)
 
 for x, y in zip(num_proteins, greedy_time):
@@ -107,4 +110,4 @@ fig.text(0.52, 0.93, "B", fontsize=30, va='center', ha='center', fontweight='bol
 
 plt.subplots_adjust(bottom=0.23, wspace=0.16, top=0.9, left=0.05, right=0.95)
 
-plt.savefig("../Results/figure2.png",dpi=300)
+plt.savefig("Results/figure2.png",dpi=300)

@@ -2,11 +2,64 @@ import json
 import time
 from pathlib import Path
 import pandas as pd
-
 from PD_mul_ILP.create_graphs import *
 from PD_mul_ILP.ilp_model import *
+import ast
 
-def run_mul_ilp(mutreg_regions, sequences_nt, protein_names, args):
+def revcomp(seq: str) -> str:
+    comp = str.maketrans("ACGTacgtNn", "TGCAtgcaNn")
+    return seq.translate(comp)[::-1]
+
+def node_to_tuple(node):
+    # sometimes nodes are stored as strings like "(12, 34, 'r')"
+    if isinstance(node, str):
+        return ast.literal_eval(node)
+    return node
+
+def extract_primer_seq(full_seq: str, start: int, end: int, orientation: str, upstream_len: int) -> str:
+    """
+    Assumes (start,end) are coordinates relative to the mutreg region start,
+    so we shift by upstream_len to index into full_seq = upstream + mutreg + downstream.
+    """
+    i0 = start + upstream_len
+    i1 = end + upstream_len
+    s = full_seq[i0:i1]
+    if orientation in ("r", "rev", "reverse", "-", "R"):
+        s = revcomp(s)
+    return s
+
+def save_mul_paths_csv(protein_paths: dict, protein_names: list[str], sequences_nt: list[str], cfg, out_path: Path):
+    rows = []
+    up_len = len(cfg.upstream)
+
+    # Map protein_name -> full sequence
+    seq_by_name = {name: seq for name, seq in zip(protein_names, sequences_nt)}
+
+    for protein_name, path in (protein_paths or {}).items():
+        full_seq = seq_by_name[protein_name]
+
+        for primer_index, node in enumerate(path):
+            start, end, fr = node_to_tuple(node)   # fr is your orientation
+
+            primer_seq = extract_primer_seq(full_seq, start, end, fr, up_len)
+
+            rows.append({
+                "protein_name": protein_name,
+                "primer_index": primer_index,
+                "start": int(start),
+                "end": int(end),
+                "orientation": fr,
+                "length": int(end - start),
+                "seq": primer_seq,
+            })
+
+    df_paths = pd.DataFrame(rows, columns=[
+        "protein_name","primer_index","start","end","orientation","length","seq"
+    ])
+    df_paths.to_csv(out_path, index=False)
+    print(f"[SAVE] Primer paths CSV → {out_path}")
+
+def run_mul_ilp(mutreg_regions, sequences_nt, protein_names, args, cfg):
     """
     Runs graph creation, forbidden-pairs discovery, greedy baseline, and ILP;
     appends a single-row summary to <args.output>/mul_ilp_results.csv and
@@ -22,8 +75,8 @@ def run_mul_ilp(mutreg_regions, sequences_nt, protein_names, args):
     # GRAPH CREATION
     # --------------------------------------------------------
     print(f"[STEP] Creating graphs for {len(protein_names)} proteins...")
-    graphs, graph_time, graph_memory, primer_dfs = create_graphs(
-        mutreg_regions, sequences_nt, protein_names, args
+    graphs, graph_time, graph_memory = create_graphs(
+        mutreg_regions, sequences_nt, protein_names, args, cfg
     )
     print(f"[DONE] Graphs created in {graph_time:.2f} sec (peak {graph_memory:.1f} MB).")
 
@@ -33,7 +86,7 @@ def run_mul_ilp(mutreg_regions, sequences_nt, protein_names, args):
     print("[STEP] Finding forbidden pairs across proteins...")
     t_forbid = time.time()
     single_forbidden, multiple_forbidden, single_pair_cnt, multi_pairs_cnt = find_forbidden_pairs(
-        protein_names, sequences_nt, args
+        protein_names, sequences_nt, args, cfg
     )
     forbidden_time = time.time() - t_forbid
     print(f"[DONE] Forbidden pairs in {forbidden_time:.2f} sec "
@@ -74,19 +127,8 @@ def run_mul_ilp(mutreg_regions, sequences_nt, protein_names, args):
     df.to_csv(csv_path, mode="a", index=False, header=header)
     print(f"[SAVE] Appended summary → {csv_path}")
 
-    # ---- JSON (paths per run) ----
-    def to_jsonable_paths(paths_dict):
-        out = {}
-        for name, path in (paths_dict or {}).items():
-            out[name] = [node if isinstance(node, str) else list(node) for node in path]
-        return out
-
-    json_path = outdir / f"primers_N{len(protein_names)}.json"
-    combined_paths = {
-        "ILP_primers": to_jsonable_paths(getattr(ilp_res, "protein_paths", {})),
-    }
-    with open(json_path, "w") as f:
-        json.dump(combined_paths, f, indent=2)
-    print(f"[SAVE] Paths saved → {json_path}")
+    paths_csv = outdir / f"mul_ilp_selected_primers.csv"
+    save_mul_paths_csv(ilp_res.protein_paths, protein_names, sequences_nt, cfg, paths_csv)
+    
 
     return df,ilp_res.protein_paths

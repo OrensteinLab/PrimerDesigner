@@ -19,11 +19,32 @@ All parameters match the global program configuration described in the main READ
 
 ## Output
 
-Results are written to the specified output directory.
-The output includes a summary CSV containing:
-- Runtime for different program stages
-- Number of inter and itra- protein cross-hybridization risks
-- Memory usage statistics
-- Efficiency of the selected primer sets
+Results are written to the specified output directory and include the following files:
 
-A JSON file containing the optimal primer-selection paths for each protein is also produced.
+### 1. Summary file
+
+**mul_ilp_results.csv**
+
+This file contains summary statistics for the run, including:
+
+- total runtime and runtime of individual program stages (graph construction, cross-hybridization detection, and ILP solving)  
+- number of detected intra-protein and inter-protein cross-hybridization risks  
+- peak memory usage  
+- number of selected primers per protein  
+- total predicted efficiency of the selected primer sets  
+
+---
+
+### 2. Primer selection file
+
+**mul_ilp_selected_primers.csv**
+
+This file contains the optimal primer-selection paths for each protein.
+
+For each protein, the file records:
+
+- ordered list of selected primers  
+- start and end positions  
+- strand (`f` for forward, `r` for reverse)  
+- primer sequence (5′→3′)  
+- primer length  

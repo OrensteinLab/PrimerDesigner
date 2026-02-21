@@ -5,8 +5,6 @@ import networkx as nx
 
 def create_graph(primer_df, mutreg_l, args):
 
-    print("Creating graph")
-
     # initialize graph
     graph = nx.DiGraph()
 
@@ -43,7 +41,7 @@ def dfs(graph, primer, primer_df, mutreg_l, args, tm_dict, gc_dict):
         graph.add_edge(key, 'd', weight=0.0)
         return
 
-    for next_primer in actions(primer_df, primer, args):
+    for next_primer in actions(primer_df, primer,tm_dict, args):
 
         next_key = next_primer.tup()
 
