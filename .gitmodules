@@ -1,6 +1,0 @@
-[submodule "pcrEfficiency"]
-	path = external/pcrEfficiency
-	url = https://github.com/maxibor/pcrEfficiency.git
-[submodule "external/primalscheme"]
-	path = external/primalscheme
-	url = https://github.com/aresti/primalscheme.git
