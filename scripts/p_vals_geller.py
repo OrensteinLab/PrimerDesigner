@@ -8,7 +8,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 # ---------------- CONFIG ----------------
-NULL_CSV = "external/pcrEfficiency/Results/null_scores_Geller.csv"
+NULL_CSV = "Comparisons/Results/null_scores_CVB3.csv"
 NULL_COL = "avg_efficiency"
 
 METHOD_SCORES = {

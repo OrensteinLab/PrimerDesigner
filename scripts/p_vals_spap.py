@@ -8,13 +8,14 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 # ---------------- CONFIG ----------------
-NULL_CSV = "external/pcrEfficiency/Results/null_scores_SPAP.csv"
+NULL_CSV = "Comparisons/Results/null_scores_SPAP.csv"
 NULL_COL = "avg_efficiency"
 
 METHOD_SCORES = {
     "PD-single-LPath": 1.970000,
     "PrimalScheme": 1.954545,
-    "QuickChange-HT": 1.923077,
+    "Olivar": 1.833333,
+    "Appel et al.": 1.923077,
 }
 
 OUT_FIG = "Results/null_distribution_spap.png"
@@ -57,8 +58,9 @@ def plot_null_with_methods(null, method_scores, out_path):
     colors = {
         "PD-single-LPath": "#d62728",
         "PrimalScheme": "#2ca02c",
-        "QuickChange-HT": "#9467bd",
-        }
+        "Olivar": "#ff7f0e",
+        "Appel et al.": "#9467bd",
+    }
 
     # Vertical lines
     for method, score in method_scores.items():
@@ -107,6 +109,10 @@ def plot_null_with_methods(null, method_scores, out_path):
     plt.close(fig)
 
 
+def empirical_percentile(null, score):
+    return 100.0 * np.sum(null <= score) / float(len(null))
+
+
 def main():
 
     null = load_null_scores(NULL_CSV, NULL_COL)
@@ -114,6 +120,11 @@ def main():
     plot_null_with_methods(null, METHOD_SCORES, OUT_FIG)
 
     print("Saved figure to:", OUT_FIG)
+    print()
+    for method, score in METHOD_SCORES.items():
+        pval = empirical_p_value(null, score)
+        pctl = empirical_percentile(null, score)
+        print(f"{method:20s}  score={score:.6f}  p-value={pval:.4g}  percentile={pctl:.1f}%")
 
 
 if __name__ == "__main__":

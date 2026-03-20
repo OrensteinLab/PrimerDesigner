@@ -11,7 +11,7 @@ def main():
     # parse user arguments
     args = get_args()
 
-    cfg = load_config("config.json")
+    cfg = load_config(args.config)
 
     # read protein coding-sequences from file
     mutreg_regions, full_sequences, protein_names = read_sequences(args.file_path,cfg)
