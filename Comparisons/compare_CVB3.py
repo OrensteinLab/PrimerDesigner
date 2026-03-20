@@ -138,7 +138,7 @@ def find_unique(haystack: str, needle: str, prev_pos):
 
 def main():
 
-    CVB3_PRIMERS = read_primers_csv("Comparisons/CVB3_primers.csv")
+    CVB3_PRIMERS = read_primers_csv("Comparisons/Primers/CVB3_primers.csv")
 
     # load upstream/downstream context and other parameters from config
     cfg = GU.load_config("configs/CVB3_experiment.json")
