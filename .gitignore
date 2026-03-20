@@ -7,8 +7,10 @@ __pycache__/
 # Gurobi license (PRIVATE — never commit)
 gurobi.json
 
+nohup.out
+
 # Shell scripts
 *.sh
 
 logs/
-Temp/
+Temp/external/
