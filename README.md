@@ -5,7 +5,7 @@
 
 This repository contains the source code for PrimerDesigner, a tool designed to find the most efficient primer set with complete coverage and no cross hybridization risk for protein synthesis using PCR. It accompanies the paper titled "PrimerDesigner: Designing efficient primers for synthesizing large protein libraries without cross-hybridization".
 
-![alt text](https://github.com/Jonathan-Mandl/PrimerDesigner/blob/main/primer_design_illustration.png)
+![alt text](https://github.com/Jonathan-Mandl/PrimerDesigner/blob/main/docs/primer_design_illustration.png)
 
 
 ## Creating the Conda Environment

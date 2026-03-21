@@ -13,5 +13,6 @@ nohup.out
 *.sh
 
 logs/
-Temp/external/
+Temp/
+temp/
 external/
