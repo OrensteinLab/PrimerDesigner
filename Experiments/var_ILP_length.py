@@ -19,8 +19,8 @@ def main():
     print(f"[INFO] Output directory: {output_dir.resolve()}")
 
     # read constant seuence and parameters
-    cfg = GU.load_config("configs/SPAP_experiment.json")
-    full_mutreg_nt = GU.read_fasta("data/SPAP_reference.fa")
+    cfg = load_config("configs/SPAP_experiment.json")
+    full_mutreg_nt = read_fasta("data/SPAP_reference.fa")
 
     summary_rows = []
     overall_start = time.time()

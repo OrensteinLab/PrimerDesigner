@@ -30,8 +30,8 @@ def run_longest_path(sequence_nt, mutreg_nt, protein_name, args, cfg):
         primer_set = primer_df.loc[primer_path_nodes].copy().reset_index()
         primer_cost = float(primer_set['efficiency'].sum())
 
-    except nx.NetworkXNoPath:
-        print("[WARN] No valid path found for {protein_name}. Skipping.")
+    except NoPathError:
+        print(f"[WARN] No valid path found for {protein_name}. Skipping.")
         primer_path_nodes = []
         primer_cost = float('nan')
 

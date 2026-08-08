@@ -11,8 +11,10 @@ nohup.out
 
 # Shell scripts
 *.sh
+*.log
 
 logs/
 Temp/
 temp/
 external/
+quickstart_output/

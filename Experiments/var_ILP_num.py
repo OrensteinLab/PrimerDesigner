@@ -20,10 +20,10 @@ def main():
     print(f"[INFO] Output directory: {output_dir.resolve()}")
 
     # constant seuence and parameters
-    cfg = GU.load_config("configs/SPAP_experiment.json")
+    cfg = load_config("configs/SPAP_experiment.json")
 
     # load fasta sequence
-    mutreg_nt = GU.read_fasta("data/SPAP_reference.fa")
+    mutreg_nt = read_fasta("data/SPAP_reference.fa")
 
     sequence_nt = cfg.upstream + mutreg_nt + cfg.downstream
 

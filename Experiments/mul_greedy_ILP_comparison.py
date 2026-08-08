@@ -9,7 +9,7 @@ def main():
 
     args.file_path = "data/10_protein_coding_sequences.txt"
 
-    cfg = GU.load_config("configs/SPAP_experiment.json")
+    cfg = load_config("configs/SPAP_experiment.json")
 
     args.output = "Results"
 
@@ -33,7 +33,7 @@ def main():
         protein_names  = all_protein_names[:i]
 
         # run and collect the summary row
-        summary_row = run_mul_greedy(sequences_nt, mutreg_regions, protein_names, args,cfg,save_outputs=False)
+        summary_row, _ = run_mul_greedy(sequences_nt, mutreg_regions, protein_names, args,cfg,save_outputs=False)
         summary_rows.append(summary_row)
 
     # write the aggregated results once

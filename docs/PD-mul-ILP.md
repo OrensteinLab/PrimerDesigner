@@ -3,48 +3,59 @@
 
 ## Overview
 `PD-mul-ILP` designs an efficient primer set for **multiple non-homologous protein-coding sequences**.  
-This version first identifies all primer pairs that may cross-hybridize between different proteins using a brute-force search, and then encodes these as forbidden-pair constraints in an ILP formulation. The ILP ensures that no two selected primers form a high-risk cross-hybridizing pair, while maximizing the overall primer efficiency.
+This version first identifies primer pairs that may cross-hybridize (intra- and inter-protein) using a brute-force search, then encodes these as forbidden-pair constraints in an ILP. The ILP avoids selecting any high-risk pair while maximizing total primer efficiency.
+
+Requires a Gurobi license (`gurobi.json` in the repository root). See the main README.
 
 ## Input Format (Required)
-Create a text file where **each line** contains a protein name and its DNA coding sequence, separated by a tab character:
+Create a text file where **each line** contains a protein name and its DNA coding sequence, separated by a **tab**:
 
 ```text
-SHP2   ATGACATCGCGGAGATGGTTTCACCCAAATATCACTGGTGTGGAGGCAGAAAACCTACTGTTGACAAGAGGAGT...
-CXAR   ATGGCGCTCCTGCTGTGCTTCGTGCTCCTGTGCGGAGTAGTGGATTTCGCCAGAAGTTTGAGTATCACTACTCC...
+SHP2	ATGACATCGCGGAGATGGTTTCACCCAAATATCACTGGTGTGGAGGCAGAAAACCTACTGTTGACAAGAGGAGT...
+CXAR	ATGGCGCTCCTGCTGTGCTTCGTGCTCCTGTGCGGAGTAGTGGATTTCGCCAGAAGTTTGAGTATCACTACTCC...
 ```
+
+Upstream and downstream flanks come from `--config` (see the main README). Example multi-protein input: `data/10_protein_coding_sequences.txt`.
 
 ## Parameters
 
-All parameters match the global program configuration described in the main README and are supplied as command-line arguments.
+All parameters match the global program configuration described in the main README and are supplied as command-line arguments. Cross-hybridization uses `max_tm` from the config file (heterodimer cutoff), not `--min_tm` / `--max_tm`. `--allowed_overlap` is used when enumerating forbidden pairs.
 
 ## Output
 
-Results are written to the specified output directory and include the following files:
+Results are written to the directory given by `--output`:
 
 ### 1. Summary file
 
-**mul_ilp_results.csv**
+**`mul_ilp_results.csv`**
 
-This file contains summary statistics for the run, including:
+One row per run (appended if the file already exists):
 
-- total runtime and runtime of individual program stages (graph construction, cross-hybridization detection, and ILP solving)  
-- number of detected intra-protein and inter-protein cross-hybridization risks  
-- peak memory usage  
-- number of selected primers per protein  
-- total predicted efficiency of the selected primer sets  
+| Column | Meaning |
+|---|---|
+| `num_proteins` | Number of input sequences |
+| `graph_time_sec` | Graph construction time |
+| `ilp_num_vars`, `ilp_num_constraints` | ILP model size |
+| `ilp_intra_forbidden_cnt`, `ilp_inter_forbidden_cnt` | Forbidden-pair counts |
+| `forbidden_time_sec` | Cross-hybridization search time |
+| `ilp_setup_time_sec`, `ilp_optimize_time_sec` | ILP setup and solve times |
+| `ilp_feasibility` | `FEASIBLE` if Gurobi status is 2, else `INFEASIBLE` |
+| `total_primer_efficiency` | ILP objective (sum of selected primer efficiencies) |
+| `num_primers` | Total primers across all proteins |
 
----
+Peak memory and per-protein primer counts are not written to this CSV.
 
 ### 2. Primer selection file
 
-**mul_ilp_selected_primers.csv**
+**`mul_ilp_selected_primers.csv`**
 
-This file contains the optimal primer-selection paths for each protein.
+One row per selected primer (not a single cell listing the whole path):
 
-For each protein, the file records:
-
-- ordered list of selected primers  
-- start and end positions  
-- strand (`f` for forward, `r` for reverse)  
-- primer sequence (5′→3′)  
-- primer length  
+| Column | Meaning |
+|---|---|
+| `protein_name` | Protein |
+| `primer_index` | Order along that protein’s path (0-based) |
+| `start`, `end` | Coordinates relative to the mutagenized CDS start (upstream flank is negative) |
+| `orientation` | `f` or `r` |
+| `length` | `end - start` |
+| `seq` | Primer sequence (5′→3′) |

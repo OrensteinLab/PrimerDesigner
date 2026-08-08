@@ -168,7 +168,7 @@ def run_greedy(
 
             try:
                 lp = longest_path_dag(graph, 's', 'd')[1:-1]
-            except nx.NetworkXNoPath:
+            except NoPathError:
                 print(f"[WARN] No valid path found for {protein_name}. Skipping.")
                 break
 

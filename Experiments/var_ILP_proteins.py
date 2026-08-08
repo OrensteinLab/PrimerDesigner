@@ -15,7 +15,7 @@ def main():
 
     args.file_path = "data/10_protein_coding_sequences.txt"
 
-    cfg = GU.load_config()
+    cfg = load_config()
 
     # Create output directory if not exists
     output_dir = Path(args.output)

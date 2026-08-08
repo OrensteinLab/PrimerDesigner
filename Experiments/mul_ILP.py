@@ -15,7 +15,7 @@ def main():
 
     args.file_path = "data/10_protein_coding_sequences.txt"
 
-    cfg = GU.load_config()
+    cfg = load_config()
 
     # Create output directory if not exists
     output_dir = Path(args.output)
@@ -102,5 +102,4 @@ def main():
     print(f"[TOTAL RUNTIME] {total_minutes:.2f} minutes ({overall_end - overall_start:.1f} seconds total)")
 
 if __name__ == '__main__':
-    mp.set_start_method("spawn", force=True)
     main()
