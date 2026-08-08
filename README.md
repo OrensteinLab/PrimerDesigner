@@ -14,7 +14,6 @@ This repository contains the source code for PrimerDesigner, a tool designed to 
 
 ## Creating the Conda environment
 
-Clone the repository, then recreate the environment from `environment.yml`:
 
 ```bash
 git clone https://github.com/OrensteinLab/PrimerDesigner.git
@@ -23,13 +22,12 @@ conda env create -f environment.yml
 conda activate primer_env
 ```
 
-Run all later commands from this repository root with `primer_env` active.
 
 `gurobipy` is installed with the environment. A Gurobi **license file is only required** for `PD-var-ILP` and `PD-mul-ILP`. `PD-single-LPath` and `PD-mul-Greedy` run without `gurobi.json`.
 
 ---
 
-## Quickstart (no Gurobi)
+## Quickstart 
 
 Run **PD-single-LPath** on the SpAP coding sequence included in the repository (`data/SPAP_reference.txt`). 
 
@@ -61,8 +59,6 @@ cp gurobi.json.example gurobi.json
 }
 ```
 
-`gurobi.json` is gitignored — do not commit it.
-
 ---
 
 ## Setting up your own sequences
@@ -74,7 +70,7 @@ SHP2	ATGACATCGCGGAGATGGTTTCACCCAAATATCACTGGTGTGGAGGCAGAAAACCTACTGTTGACAAGAGGAGT.
 CXAR	ATGGCGCTCCTGCTGTGCTTCGTGCTCCTGTGCGGAGTAGTGGATTTCGCCAGAAGTTTGAGTATCACTACTCC....
 ```
 
-Variant-specific formats are described in the version documentation below.
+Version-specific formats are described in the version documentation below.
 
 Create a `config.json` (or reuse the repo file) with constant upstream and downstream flanks added around each mutagenized coding sequence:
 
@@ -85,7 +81,7 @@ Create a `config.json` (or reuse the repo file) with constant upstream and downs
 }
 ```
 
-The checked-in `config.json` also sets `max_tm` (heterodimer Tm cutoff used when detecting cross-hybridization; default 45 °C).
+The `config.json` also sets `max_tm` (heterodimer Tm cutoff used when detecting cross-hybridization; default 45 °C).
 
 ---
 
@@ -175,4 +171,3 @@ Also:
 - Comparison workflow (short): [docs/Running_comparisons.md](docs/Running_comparisons.md)
 - PCR efficiency with the external pcrEfficiency model: [docs/pcr_Efficiency.md](docs/pcr_Efficiency.md)
 
-Committed result tables (for checking a rerun) are in `Experiments/Results/` and `Comparisons/Results/`.

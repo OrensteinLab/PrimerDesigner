@@ -10,11 +10,8 @@ conda activate primer_env
 
 If the environment does not exist yet: `conda env create -f environment.yml`.
 
-ILP experiments require `gurobi.json` (see the main README) and a large-memory machine. In our runs, **PD-mul-ILP on 10 proteins used up to ~90 GB RAM**; 
+ILP experiments require `gurobi.json` (see the main README) and a large-memory machine. In our runs, **PD-mul-ILP on 10 proteins used up to ~90 GB RAM**.
 
-Scripts write new files to **`./Results/`**. Committed copies for comparison are in `Experiments/Results/`.
-
-Method comparisons on SpAP and CVB3 are documented separately: [Running_comparisons.md](Running_comparisons.md). Optional PCR-efficiency scoring: [pcr_Efficiency.md](pcr_Efficiency.md).
 
 ---
 

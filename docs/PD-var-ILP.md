@@ -25,7 +25,7 @@ All parameters follow the global program settings described in the main README. 
 
 - **`--merge_bins`**  
   Merge bins that correspond to identical non-overlapping sequences.  
-  *Default:* off (`store_true`)
+  *Default:* off 
 
 - **`--allowed_overlap`**  
   Maximum allowed overlap between primer pairs from overlapping regions.  

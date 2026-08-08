@@ -3,7 +3,7 @@
 
 ## Overview
 `PD-single-LPath` computes the most efficient primer set for **one protein-coding sequence** by constructing the primer graph and selecting the longest path.  
-This avoids ILP and provides a fast and deterministic solution. No Gurobi license is required.
+
 
 ## Input Format (Required)
 Create a text file with a **single line**: protein name and DNA coding sequence, separated by a **tab**. If the file has extra lines, only the first sequence is used.
@@ -53,4 +53,3 @@ One row per selected primer:
 | `seq` | Primer sequence (5′→3′) |
 | `efficiency` | Predicted primer efficiency |
 
-There is no primer-length column.

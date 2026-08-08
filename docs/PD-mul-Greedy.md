@@ -3,7 +3,7 @@
 
 ## Overview
 `PD-mul-Greedy` computes primer sets for **multiple non-homologous proteins** using an iterative greedy strategy.  
-For each protein, the longest-path algorithm is applied, and if the selected primers cross-hybridize with any previously selected primers, they are removed from the graph and the process repeats. No Gurobi license is required.
+For each protein, the longest-path algorithm is applied, and if the selected primers cross-hybridize with any previously selected primers, they are removed from the graph and the process repeats. 
 
 ## Input Format (Required)
 Create a text file where **each line** contains a protein name and its DNA coding sequence, separated by a **tab**:
@@ -13,11 +13,11 @@ SHP2	ATGACATCGCGGAGATGGTTTCACCCAAAT...
 CXAR	ATGGCGCTCCTGCTGTGCTTCGTGCTCC...
 ```
 
-Upstream and downstream flanks come from `--config` (see the main README). Example multi-protein input: `data/10_protein_coding_sequences.txt`.
+Upstream and downstream flanks come from `--config` (see the main README). 
 
 ## Parameters
 
-All parameters match the global program configuration described in the main README and are supplied as command-line arguments. Cross-hybridization uses `max_tm` from the config file (heterodimer cutoff), not `--min_tm` / `--max_tm`.
+All parameters match the global program configuration described in the main README and are supplied as command-line arguments. Cross-hybridization uses `max_tm` from the config file (heterodimer cutoff).
 
 ## Output
 
@@ -40,7 +40,6 @@ One row for the whole run:
 | `unresolved_proteins_cnt`, `unresolved_proteins` | Proteins with no valid path |
 | `total_primers` | Total primers across all accepted paths |
 
-Peak memory is not written. Per-protein primer counts are in the metrics file below.
 
 ### 2. Per-protein metrics
 
@@ -62,4 +61,3 @@ One row per selected primer:
 | `orientation` | `f` or `r` |
 | `seq` | Primer sequence (5′→3′) |
 
-There is no primer-length column.

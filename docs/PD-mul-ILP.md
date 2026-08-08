@@ -3,7 +3,7 @@
 
 ## Overview
 `PD-mul-ILP` designs an efficient primer set for **multiple non-homologous protein-coding sequences**.  
-This version first identifies primer pairs that may cross-hybridize (intra- and inter-protein) using a brute-force search, then encodes these as forbidden-pair constraints in an ILP. The ILP avoids selecting any high-risk pair while maximizing total primer efficiency.
+This version first identifies primer pairs that may cross-hybridize (intra- and inter-protein) using a brute-force search, then encodes these as forbidden-pair constraints in an ILP. 
 
 Requires a Gurobi license (`gurobi.json` in the repository root). See the main README.
 
@@ -15,7 +15,7 @@ SHP2	ATGACATCGCGGAGATGGTTTCACCCAAATATCACTGGTGTGGAGGCAGAAAACCTACTGTTGACAAGAGGAGT.
 CXAR	ATGGCGCTCCTGCTGTGCTTCGTGCTCCTGTGCGGAGTAGTGGATTTCGCCAGAAGTTTGAGTATCACTACTCC...
 ```
 
-Upstream and downstream flanks come from `--config` (see the main README). Example multi-protein input: `data/10_protein_coding_sequences.txt`.
+Upstream and downstream flanks come from `--config` (see the main README). 
 
 ## Parameters
 
