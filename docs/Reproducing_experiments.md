@@ -1,6 +1,6 @@
 # Reproducing PrimerDesigner experiments
 
-Run every command from the **repository root** after activating `primer_env`.
+Run every command from the **repository root** with `primer_env` active.
 
 ```bash
 git clone https://github.com/OrensteinLab/PrimerDesigner.git
@@ -8,129 +8,82 @@ cd PrimerDesigner
 conda activate primer_env
 ```
 
-If the environment does not exist yet, create it first (`conda env create -f environment.yml`).
+If the environment does not exist yet: `conda env create -f environment.yml`.
 
-Committed result tables (to compare against a rerun):
+ILP experiments require `gurobi.json` (see the main README). Scripts write new files to **`./Results/`**. Committed copies for comparison are in `Experiments/Results/`.
 
-- `Experiments/Results/` — scaling / ILP vs greedy CSVs
-- `Comparisons/Results/` — SpAP and CVB3 method comparisons
-
-Experiment scripts write new files to **`./Results/`** (repository root), not into `Experiments/Results/`. Compare your new CSVs to the committed copies.
+Method comparisons on SpAP and CVB3 are documented separately: [Running_comparisons.md](Running_comparisons.md). Optional PCR-efficiency scoring: [pcr_Efficiency.md](pcr_Efficiency.md).
 
 ---
 
-## 1. Which license do you need?
+## PD-mul-Greedy on 100 CCDS proteins
 
-| Analysis | Script(s) | Gurobi `gurobi.json` |
-|---|---|---|
-| SpAP / CVB3 comparisons | `Comparisons/compare_SpAP.py`, `Comparisons/compare_CVB3.py` | No |
-| 100-CDS greedy scaling | `Experiments/mul_greedy_100_cds.py` | No |
-| Greedy vs increasing protein count | `Experiments/mul_greedy_ILP_comparison.py` | No |
-| PD-mul-ILP scaling | `Experiments/mul_ILP.py` | **Yes** |
-| PD-var-ILP (length / variants / proteins) | `Experiments/var_ILP_*.py` | **Yes** |
-| PCR-efficiency scores (optional) | `docs/pcr_Efficiency.md` | No (separate Python 2 env) |
+Scales the greedy multi-protein designer to 100 CCDS sequences and records total efficiency, runtime, and cross-hybridization retries.
 
-Copy `gurobi.json.example` to `gurobi.json` and fill in a [Gurobi WLS](https://www.gurobi.com/downloads/end-user-license-agreement-academic/) academic license.
-
-ILP jobs are large (multi-GB RAM; `PD-mul-ILP` on 10 proteins can take hours).
-
----
-
-## 2. Method comparisons (SpAP and CVB3)
-
-Competing primer sets are already in `Comparisons/Primers/`. You do **not** need to reinstall Olivar / PrimalScheme to reproduce the comparison tables.
-
-```bash
-python -m Comparisons.compare_SpAP
-python -m Comparisons.compare_CVB3
-```
-
-**Writes** (under `Comparisons/Results/`):
-
-| File | Contents |
-|---|---|
-| `SpAP_comparison.csv` | Runtime, memory, mean efficiency vs QuickChange / PrimalScheme / Olivar |
-| `SPAP_primers.csv` | Primer sequences per method |
-| `null_paths_primers_SPAP.csv` | 1000 random graph paths (null distribution) |
-| `CVB3_comparison.csv` | Same metrics vs the published CVB3 primer set |
-| `CVB3_primers.csv` | Primer sequences |
-| `null_paths_primers_CVB3.csv` | Null paths |
-
-Configs: `configs/SPAP_experiment.json`, `configs/CVB3_experiment.json`.
-
-Optional PCR-efficiency rescoring with the external **pcrEfficiency** tool: [pcr_Efficiency.md](pcr_Efficiency.md).  
-Helper scripts: `Comparisons/pcrEffficiency_scripts/`.
-
----
-
-## 3. Scaling experiments
-
-### 3.1 PD-mul-Greedy on 100 CCDS proteins
+- **Data:** 100 human CCDS coding sequences (`data/100_ccds_protein_sequences.txt`) with SpAP upstream/downstream flanks (`configs/SPAP_experiment.json`).
+- **Output:** `Results/PD_mul_Greedy_summary.csv` (and per-protein metrics). Reference: `Experiments/Results/PD-mul-Greedy.csv`
 
 ```bash
 python -m Experiments.mul_greedy_100_cds
 ```
 
-- Input: `data/100_ccds_protein_sequences.txt`
-- Config: `configs/SPAP_experiment.json`
-- Output: `Results/PD_mul_Greedy_summary.csv` (and per-protein metrics). Committed reference: `Experiments/Results/PD-mul-Greedy.csv`
-- Runtime: ~1 hour in the committed run (~4400 s)
+---
 
-### 3.2 PD-mul-Greedy, increasing protein count
+## PD-mul-Greedy with increasing protein count
+
+Runs greedy design on the first 2, 3, …, 10 non-homologous coding sequences to measure how cost grows with the number of proteins.
+
+- **Data:** Ten non-homologous protein-coding sequences (`data/10_protein_coding_sequences.txt`); the script uses the first *k* sequences for *k* = 2…10, with SpAP flanks (`configs/SPAP_experiment.json`).
 
 ```bash
 python -m Experiments.mul_greedy_ILP_comparison
 ```
 
-- Input: first 2…10 sequences in `data/10_protein_coding_sequences.txt`
-- Output: `Results/PD-mul-Greedy_ILP_comparison.csv`
+---
 
-### 3.3 PD-mul-ILP scaling
+## PD-mul-ILP scaling
 
-Requires Gurobi. High memory (committed peak ~10 GB at 10 proteins).
+Solves the multi-protein ILP on the same 1…10 sequence prefixes. Requires Gurobi. Memory is high (committed peak ~10 GB at 10 proteins).
+
+- **Data:** The same ten non-homologous coding sequences (`data/10_protein_coding_sequences.txt`), prefixes of length 1…10, with flanks from the root `config.json`.
 
 ```bash
 python -m Experiments.mul_ILP
 ```
 
-- Output: `Results/PD-mul-ILP.csv`
-- Committed reference: `Experiments/Results/PD-mul-ILP.csv` (that copy also has extra greedy columns from a combined run)
+---
 
-### 3.4 PD-var-ILP
+## PD-var-ILP: increasing sequence length
 
-Requires Gurobi. Uses the SpAP coding sequence unless noted.
+Designs primers for 3 variants of SpAP while lengthening the coding sequence (226–1626 nt, step 100). Requires Gurobi.
+
+- **Data:** The SpAP coding sequence (`data/SPAP_reference.fa`), truncated to each target length, with SpAP flanks (`configs/SPAP_experiment.json`).
 
 ```bash
-# Increasing coding-sequence length (226–1626 nt, step 100)
 python -m Experiments.var_ILP_length
-
-# Increasing number of variants (2–8)
-python -m Experiments.var_ILP_num
-
-# One run per protein in the 10-protein set
-python -m Experiments.var_ILP_proteins
 ```
-
-| Script | Output CSV | Committed copy |
-|---|---|---|
-| `var_ILP_length.py` | `Results/PD-var-ILP-increasing-lengths.csv` | `Experiments/Results/PD-var-ILP-increasing-lengths.csv` |
-| `var_ILP_num.py` | `Results/PD-var-ILP-increasing_variants.csv` | `Experiments/Results/PD-var-ILP-increasing_variants.csv` |
-| `var_ILP_proteins.py` | `Results/PD-var-ILP-different-proteins.csv` | `Experiments/Results/PD-var-ILP-different-proteins.csv` |
-
-`var_ILP_proteins.py` uses root `config.json`. Length and variant sweeps use `configs/SPAP_experiment.json`.
 
 ---
 
-## 4. Data files used in the paper
+## PD-var-ILP: increasing number of variants
 
-| Path | Role |
-|---|---|
-| `data/SPAP_reference.fa` / `.txt` | SpAP coding sequence |
-| `data/CVB3_reference.fa` / `.txt` | CVB3 coding sequence |
-| `data/10_protein_coding_sequences.txt` | 10 non-homologous CDSs (`name<TAB>sequence`) |
-| `data/100_ccds_protein_sequences.txt` | 100 CCDS proteins for greedy scaling |
-| `configs/SPAP_experiment.json` | Upstream/downstream flanks for SpAP experiments |
-| `configs/CVB3_experiment.json` | Flanks for CVB3 |
-| `Comparisons/Primers/` | Published / competitor primer BED/CSV inputs |
+Holds the full SpAP coding sequence fixed and increases the number of variants from 2 to 8. Requires Gurobi.
 
-Input sequence files are **one protein per line**, name and DNA sequence separated by a **tab**.
+- **Data:** The full SpAP coding sequence (`data/SPAP_reference.fa`) with SpAP flanks (`configs/SPAP_experiment.json`); only the requested variant count changes.
+
+```bash
+python -m Experiments.var_ILP_num
+```
+
+---
+
+## PD-var-ILP: different proteins
+
+Runs the variant ILP once per sequence in the 10-protein set. Requires Gurobi.
+
+- **Data:** Each of the ten non-homologous coding sequences in turn (`data/10_protein_coding_sequences.txt`), with flanks from the root `config.json`.
+- **Output:** `Results/PD-var-ILP-different-proteins.csv`. Reference: `Experiments/Results/PD-var-ILP-different-proteins.csv`
+
+```bash
+python -m Experiments.var_ILP_proteins
+```

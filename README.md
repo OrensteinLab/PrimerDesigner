@@ -8,27 +8,7 @@ This repository contains the source code for PrimerDesigner, a tool designed to 
 ![alt text](https://github.com/OrensteinLab/PrimerDesigner/blob/main/docs/primer_design_illustration.png)
 
 **License:** MIT (see [LICENSE](LICENSE)).  
-**Contact:** Jonathan Mandl (jonathan.mandl2@gmail.com). 
-
----
-
-## Which version should I use?
-
-| Situation | Version | Solver |
-|---|---|---|
-| One protein-coding sequence | **PD-single-LPath** | None (graph longest path) |
-| Several variants of the **same** protein | **PD-var-ILP** | Gurobi |
-| Several **non-homologous** proteins, fast | **PD-mul-Greedy** | None |
-| Several **non-homologous** proteins, optimal | **PD-mul-ILP** | Gurobi |
-
-Per-variant input/output details:
-
-- [docs/PD-single-LPath.md](docs/PD-single-LPath.md)
-- [docs/PD-var-ILP.md](docs/PD-var-ILP.md)
-- [docs/PD-mul-Greedy.md](docs/PD-mul-Greedy.md)
-- [docs/PD-mul-ILP.md](docs/PD-mul-ILP.md)
-
-To reproduce the paper experiments, see **[docs/Reproducing_experiments.md](docs/Reproducing_experiments.md)**.
+**Contact:** jonathan.mandl2@gmail.com
 
 ---
 
@@ -51,7 +31,7 @@ Run all later commands from this repository root with `primer_env` active.
 
 ## Quickstart (no Gurobi)
 
-This uses the SpAP coding sequence shipped in the repo (~1.6 kb CDS plus the flanks in `config.json`). Graph construction takes a few minutes.
+Run **PD-single-LPath** on the SpAP coding sequence included in the repository (`data/SPAP_reference.txt`). 
 
 ```bash
 python ./tool.py \
@@ -59,32 +39,6 @@ python ./tool.py \
   --file_path data/SPAP_reference.txt \
   --config config.json \
   --output quickstart_output
-```
-
-Input format is **tab-separated**: `protein_name<TAB>DNA_sequence` (see `data/SPAP_reference.txt`).
-Do not use `data/example_input.txt` with default oligo lengths — those sequences are only 92 nt and are shorter than `--oligo_lmin` (195).
-
-**Expected outputs** in `quickstart_output/`:
-
-- `PD_single_LPath_results.csv` — one summary row (`protein_name`, graph size, total efficiency, runtime, `num_primers`)
-- `PD_single_LPath_selected_primers.csv` — one row per selected primer (`start`, `stop`, `orientation`, `seq`, `efficiency`)
-
-A successful run prints a path similar to:
-
-```text
-Saved selected primers to: quickstart_output/PD_single_LPath_selected_primers.csv
-```
-
-ILP example (requires Gurobi; see next section):
-
-```bash
-python ./tool.py \
-  --version PD-mul-ILP \
-  --file_path data/10_protein_coding_sequences.txt \
-  --config config.json \
-  --output run_output \
-  --primer_lmin 20 --primer_lmax 26 \
-  --oligo_lmin 180 --oligo_lmax 200
 ```
 
 ---
@@ -120,7 +74,7 @@ SHP2	ATGACATCGCGGAGATGGTTTCACCCAAATATCACTGGTGTGGAGGCAGAAAACCTACTGTTGACAAGAGGAGT.
 CXAR	ATGGCGCTCCTGCTGTGCTTCGTGCTCCTGTGCGGAGTAGTGGATTTCGCCAGAAGTTTGAGTATCACTACTCC....
 ```
 
-Variant-specific formats are described in the docs linked above.
+Variant-specific formats are described in the version documentation below.
 
 Create a `config.json` (or reuse the repo file) with constant upstream and downstream flanks added around each mutagenized coding sequence:
 
@@ -131,7 +85,25 @@ Create a `config.json` (or reuse the repo file) with constant upstream and downs
 }
 ```
 
-The checked-in `config.json` also sets `max_tm` (heterodimer Tm cutoff used when detecting cross-hybridization; default 45 °C). This is separate from the primer melting-temperature filters `--min_tm` / `--max_tm`.
+The checked-in `config.json` also sets `max_tm` (heterodimer Tm cutoff used when detecting cross-hybridization; default 45 °C).
+
+---
+
+## Versions
+
+| Application | Version | Solver |
+|---|---|---|
+| One protein-coding sequence | **PD-single-LPath** | None (graph longest path) |
+| Several variants of the same protein | **PD-var-ILP** | Gurobi |
+| Several non-homologous proteins (fast) | **PD-mul-Greedy** | None |
+| Several non-homologous proteins (optimal) | **PD-mul-ILP** | Gurobi |
+
+Input and output formats for each version:
+
+- [docs/PD-single-LPath.md](docs/PD-single-LPath.md)
+- [docs/PD-var-ILP.md](docs/PD-var-ILP.md)
+- [docs/PD-mul-Greedy.md](docs/PD-mul-Greedy.md)
+- [docs/PD-mul-ILP.md](docs/PD-mul-ILP.md)
 
 ---
 

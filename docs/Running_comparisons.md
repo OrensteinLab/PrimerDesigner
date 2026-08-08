@@ -1,8 +1,8 @@
-# Reproducing PrimerDesigner Experiments
+# Reproducing method comparisons
 
-For all paper experiments (comparisons, scaling sweeps, Gurobi), see [Reproducing_experiments.md](Reproducing_experiments.md).
+Scaling and ILP experiments are documented in [Reproducing_experiments.md](Reproducing_experiments.md).
 
-## Reproducing comparison on SpAP and CVB3 proteins
+## SpAP and CVB3
 
 From the main directory, run:
 
